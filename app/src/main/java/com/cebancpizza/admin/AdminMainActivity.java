@@ -133,7 +133,6 @@ public class AdminMainActivity extends ActionBarActivity implements AdminNavigat
                 if(adminFormpagos != null) {
                     adminFormpagos.iniciarAccion(1);
                 }
-
                 break;
         }
     }
