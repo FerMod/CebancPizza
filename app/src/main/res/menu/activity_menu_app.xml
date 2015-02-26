@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".DatosCliente">
+   <item android:id="@+id/menu_admin"
+        android:title="@string/action_admin"
+        app:showAsAction="withText|ifRoom" /><!--"never" para ver como boton-->
+</menu>

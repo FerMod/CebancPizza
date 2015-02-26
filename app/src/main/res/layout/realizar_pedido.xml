@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+        <!--<Button
+            android:id="@+id/bRealizarPedido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="20dp"
+            android:onClick="mensajeRealizarPedido"
+            android:text="@string/realizar_compra" />-->
+
+        <TextView
+            android:id="@+id/tvTextoTotalBebidas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTextoTotalPizzas"
+            android:text="@string/total_bebidas"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/separador_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/separador_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_below="@+id/tvTextoTotalBebidas"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/tvTextoNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nombre"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/tvDatosCliente"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/tvTextoDni"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dni"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/tvTextoNombre"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/tvTextoDireccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/direccion"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/tvTextoDni"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/tvTextoTelefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/telefono"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/tvTextoDireccion"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:id="@+id/tvDatosCliente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/texto_datos_clientes"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/tvTextoTotalPizzas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_pizzas"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/tvFactura"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/tvTextoTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvTextoTotalBebidas"
+            android:layout_below="@+id/separador_horizontal"
+            android:text="@string/total"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/tvSumaTotales"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_below="@+id/separador_horizontal"
+            android:layout_alignLeft="@+id/tvTotalBebidas"
+            android:layout_alignStart="@+id/tvTotalBebidas" />
+
+        <TextView
+            android:id="@+id/textViewNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/tvDatosCliente"
+            android:layout_alignLeft="@+id/tvTotalPizzas"
+            android:layout_alignStart="@+id/tvTotalPizzas" />
+
+        <TextView
+            android:id="@+id/textViewDni"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/textViewNombre"
+            android:layout_alignLeft="@+id/textViewNombre"
+            android:layout_alignStart="@+id/textViewNombre" />
+
+        <TextView
+            android:id="@+id/textViewDireccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/textViewDni"
+            android:layout_alignLeft="@+id/textViewDni"
+            android:layout_alignStart="@+id/textViewDni" />
+
+        <TextView
+            android:id="@+id/tvFactura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/texto_factura"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_below="@+id/tvTextoTelefono"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="38dp" />
+
+        <TextView
+            android:id="@+id/textViewTelefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/textViewDireccion"
+            android:layout_alignLeft="@+id/textViewDireccion"
+            android:layout_alignStart="@+id/textViewDireccion" />
+
+        <TextView
+            android:id="@+id/tvTotalBebidas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_alignTop="@+id/tvTextoTotalBebidas"
+            android:layout_toRightOf="@+id/tvTextoTotalBebidas"
+            android:layout_toEndOf="@+id/tvTextoTotalBebidas" />
+
+        <TextView
+            android:id="@+id/tvTotalPizzas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_above="@+id/tvTotalBebidas"
+            android:layout_toRightOf="@+id/tvTextoTotalBebidas"
+            android:layout_toEndOf="@+id/tvTextoTotalBebidas" />
+    </RelativeLayout>
+</ScrollView>

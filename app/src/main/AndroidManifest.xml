@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.cebancpizza" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+        <!-- android:name=".PantallaInicio" -->
+        <activity
+            android:name=".cliente.DatosCliente"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".cliente.MainActivity"
+            android:label="Menu" />
+        <activity
+        android:name=".cliente.PantallaInicio"
+        android:label="Datos Personales" />
+        <activity
+            android:name=".admin.AdminMainActivity"
+            android:label="Modo Admin" />
+        <!--<activity-->
+            <!--android:name=".DatosCliente"-->
+            <!--android:label="Datos Personales" />-->
+        <activity
+            android:name=".cliente.NuevaPizza"
+            android:label="Nueva Pizza" />
+        <activity
+            android:name=".cliente.NuevaBebida"
+            android:label="Nueva Bebida" />
+    </application>
+
+</manifest>

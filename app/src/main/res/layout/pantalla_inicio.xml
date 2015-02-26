@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:onClick="irSiguiente"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvTextoNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"
+        android:textSize="50dp"
+        android:layout_above="@+id/imageView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tvInformacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="230dp"
+        android:text="@string/informacion"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/gris"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/logo_cebanc_sin_fondo"
+        android:contentDescription="@string/logo"
+        android:id="@+id/imageView"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/tvTextoNombre"
+        android:layout_alignStart="@+id/tvTextoNombre"
+        android:layout_alignRight="@+id/tvTextoNombre"
+        android:layout_alignEnd="@+id/tvTextoNombre" />
+
+</RelativeLayout>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CEBANC PIZZA</string>
+    <string name="texto_salir">Salir</string>
+    <string name="menu_datos_cliente">Datos Personales</string>
+
+    <string name="menu_pizzas">Pizzas</string>
+    <string name="menu_bebidas">Bebidas</string>
+    <string name="menu_finalizar">Realizar Pedido</string>
+
+    <string name="menu_admin_pizzas">Pizzas</string>
+    <string name="menu_admin_tamanos">Tamaños</string>
+    <string name="menu_admin_masas">Masas</string>
+    <string name="menu_admin_pedidospizzas">PedidosPizzas</string>
+    <string name="menu_admin_bebidas">Bebidas</string>
+    <string name="menu_admin_pedidosbebidas">PedidosBebidas</string>
+    <string name="menu_admin_pedidos">Pedidos</string>
+    <string name="menu_admin_tipos">Tipos</string>
+    <string name="menu_admin_albaranes">Albaranes</string>
+    <string name="menu_admin_clientes">Clientes</string>
+    <string name="menu_admin_formpagos">Formpagos</string>
+
+    <string name="anadir_pizza">Añadir Pizza</string>
+    <string name="anadir_tamano">Añadir Tamaño</string>
+    <string name="anadir_masa">Añadir Masa</string>
+    <string name="anadir_pedidopizza">Añadir PedidoPizza</string>
+    <string name="anadir_bebida">Añadir Bebida</string>
+    <string name="anadir_pedidobebida">Añadir PedidoBebida</string>
+    <string name="anadir_pedido">Añadir Pedido</string>
+    <string name="anadir_tipo">Añadir Tipo</string>
+    <string name="anadir_albaran">Añadir Albaran</string>
+    <string name="anadir_cliente">Añadir Cliente</string>
+    <string name="anadir_formpago">Añadir Formpago</string>
+    <string name="finalizar">Finalizar</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_admin">Modo Admin</string>
+    <string name="texto_tipo_pizza">Seleccione el tipo de pizza:</string>
+    <string name="texto_cantidad">Seleccione la cantidad deseada:</string>
+    <string name="texto_tipo_bebida">Seleccione el tipo de bebida:</string>
+    <string name="texto_tipo_masa">Seleccione el tipo de masa:</string>
+    <string name="texto_tamano">Seleccione el tamaño de la pizza:</string>
+    <string name="anadir">Añadir</string>
+    <string name="verPizzas">Ver Pizzas</string>
+    <string name="verBebidas">Ver Bebidas</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="descartar">Descartar Cambios</string>
+    <string name="guardar">Guardar Cambios</string>
+    <string name="texto_nombre">Introduzca su nombre:</string>
+    <string name="hint_nombre">nombre</string>
+    <string name="hint_dni">dni</string>
+    <string name="hint_direccion">direccion</string>
+    <string name="salir">Salir</string>
+    <string name="texto_direccion">Introduzca su dirección:</string>
+    <string name="texto_dni">Introduzca su D.N.I:</string>
+    <string name="texto_telefono">Introduzca su numero de télefono:</string>
+    <string name="hint_telefono">telefono</string>
+    <string name="informacion">Toque en cualquier parte de la pantalla para continuar.</string>
+    <string name="logo">Logo Cebanc</string>
+    <string name="total">Total:</string>
+    <string name="total_pizzas">Total Pizzas:</string>
+    <string name="total_bebidas">Total Bebidas:</string>
+    <string name="texto_titulo">(titulo)</string>
+    <string name="texto_subtitulo">(subtitulo)</string>
+    <string name="telefono">Telefono:</string>
+    <string name="direccion">Direccion:</string>
+    <string name="nombre">Nombre:</string>
+    <string name="dni">D.N.I:</string>
+    <string name="texto_datos_clientes">Informacion personal:</string>
+    <string name="texto_factura">Factura del pedido:</string>
+    <string name="separador_horizontal">________________________</string>
+    <string name="btnCont">Continuar</string>
+    <string name="textoAdmin">Selecciona la accion y la tabla sobre la que trabajar</string>
+
+    <string-array name="bebidas">
+        <item/>
+        <item>CocaCola</item>
+        <item>Fanta Limón</item>
+        <item>Fanta Naranja</item>
+        <item>Nestea</item>
+        <item>San Miguel</item>
+        <item>Agua</item>
+    </string-array>
+    <string-array name="pizzas">
+        <item/>
+        <item>Carbonara</item>
+        <item>Barbacoa</item>
+        <item>Cuatro Quesos</item>
+        <item>Vegetal</item>
+        <item>Tropical</item>
+    </string-array>
+    <string-array name="masa">
+        <item/>
+        <item>Normal</item>
+        <item>Fina</item>
+    </string-array>
+    <string-array name="tamano">
+        <item/>
+        <item>Individual</item>
+        <item>Mediana</item> <!-- precio +3 -->
+        <item>Familiar</item> <!-- precio +7 -->
+    </string-array>
+    <string-array name="precio_pizzas">
+        <item/>
+        <item>14.20</item>
+        <item>15.50</item>
+        <item>13.20</item>
+        <item>15.40</item>
+        <item>16.40</item>
+    </string-array>
+    <string-array name="precio_bebidas">
+        <item/>
+        <item>1.50</item>
+        <item>1.35</item>
+        <item>1.55</item>
+        <item>1.43</item>
+        <item>1.10</item>
+        <item>1.20</item>
+    </string-array>
+    <string-array name="longclick_menu">
+        <item>Editar</item>
+        <item>Eliminar</item>
+    </string-array>
+    <string-array name="acciones">
+        <item>Añadir</item>
+        <item>Editar</item>
+        <item>Eliminar</item>
+    </string-array>
+    <string-array name="tablas">
+        <item>Clientes</item>
+        <item>Pedidos</item>
+        <item>Pizzas</item>
+        <item>Lineas</item>
+        <item>Bebidas</item>
+    </string-array>
+
+    <color name="gris">#848484</color>
+
+    <string name="title_activity_admin_pedidos">AdminPedidos</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>
