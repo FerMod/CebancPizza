@@ -134,9 +134,7 @@ public class AdminMainActivity extends ActionBarActivity implements AdminNavigat
                     adminFormpagos.iniciarAccion(1);
                 }
                 break;
-
         }
-
     }
 
     @Override
