@@ -1,6 +1,7 @@
 package com.cebancpizza.cliente;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -8,6 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,11 +20,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cebancpizza.R;
+import com.cebancpizza.database.Albaran;
 import com.cebancpizza.database.CebancPizzaSQLiteHelper;
 import com.cebancpizza.database.Cliente;
 import com.cebancpizza.database.PedidoBebida;
@@ -32,19 +36,18 @@ import java.util.ArrayList;
 
 import static android.widget.AdapterView.OnItemSelectedListener;
 
-public class RealizarPedido extends Fragment implements MainActivity.OnMainActivityListener, OnItemSelectedListener{
+public class RealizarPedido extends Fragment implements MainActivity.OnMainActivityListener, OnItemSelectedListener {
 
     private String premio;
 
-    private TextView tvTotalPizzas, tvTotalBebidas, tvSumaTotales, tvNombre,  tvDni, tvDireccion, tvTelefono;
+    private TextView tvTotalPizzas, tvTotalBebidas, tvSumaTotales, tvNombre, tvDni, tvDireccion, tvTelefono;
     private String SECTION_NUMBER = "section_number";
     private double totalPizzas, totalBebidas, total;
     private Cliente cliente;
-    private ArrayList<PedidoBebida> pedidoBebida;
+    private Albaran albaran;
+    private ArrayList<PedidoBebida> pedidoBebidas;
     private ArrayList<PedidoPizza> pedidoPizzas;
-    private int prem, ident;
     private CebancPizzaSQLiteHelper sqLiteHelper;
-    private int idPedido, idPizza, idBebida;
     private int posicionFormpagos;
     private ArrayList<String> formpagos;
 
@@ -66,14 +69,14 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
         View view = inflater.inflate(R.layout.realizar_pedido, container, false);
 
         tvTotalPizzas = (TextView) view.findViewById(R.id.tvTotalPizzas);
-        tvTotalPizzas.setText(" " + String.format("%.2f", totalPizzas)  + "€");
+        tvTotalPizzas.setText(" " + String.format("%.2f", totalPizzas) + "€");
 
         tvTotalBebidas = (TextView) view.findViewById(R.id.tvTotalBebidas);
-        tvTotalBebidas.setText(" " + String.format("%.2f", totalBebidas)  + "€");
+        tvTotalBebidas.setText(" " + String.format("%.2f", totalBebidas) + "€");
 
         total = totalPizzas + totalBebidas;
         tvSumaTotales = (TextView) view.findViewById(R.id.tvSumaTotales);
-        tvSumaTotales.setText(" " + String.format("%.2f", total)  + "€");
+        tvSumaTotales.setText(" " + String.format("%.2f", total) + "€");
 
         setRetainInstance(true);
         return view;
@@ -103,26 +106,30 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
         tvTelefono.setText(cliente.getTelefono());
     }
 
-    public void mensajeRealizarPedido(){
+    public void finalizarPedido() {
+        if (totalPizzas > 0) {
+            showAlertFormpago();
+        } else {
+            muestraAviso("Pizza no añadida", "Debe hacer almenos la compra de una pizza para realizar el pedido!", false);
+        }
+    }
+
+    public void mensajeRealizarPedido() {
 
         Builder dlgAlert = new Builder(getActivity());
         dlgAlert.setTitle("Mensaje Confirmación");
         dlgAlert.setMessage("Va ha realizar la compra del pedido de pizzas y bebidas.\nDesea continuar?");
         dlgAlert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        prem = getPremio(total);
-                        insertarCliente();
-                        insertarPedidos();
-//                            insertarPizzas();
-//                            if (totalBebidas > 0) {
-//                                insertarBebidas();
-//                            }
-                        muestraAviso("Información", "Pedido realizado con exito!\nGracias por su compra!", true);
-                    }
-                }
+            public void onClick(DialogInterface dialog, int which) {
+                muestraPremio(total);
+                insertarCliente();
+                insertarPedidos();
+                muestraAviso("Información", "Pedido realizado con exito!\nGracias por su compra!", true);
 
-        );
-        dlgAlert.setNegativeButton("Cancelar",null);
+            }
+
+        });
+        dlgAlert.setNegativeButton("Cancelar", null);
         dlgAlert.setCancelable(true);
         dlgAlert.create().show();
     }
@@ -134,47 +141,59 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
             values.put("nombre", cliente.getNombre());
             values.put("direccion", cliente.getDireccion());
             values.put("telefono", cliente.getTelefono());
-            values.put("formpago", cliente.getFormpago() );
             sqLiteHelper.insert("clientes", null, values);
         }
     }
 
     public void showAlertFormpago() {
 
-        if (totalPizzas > 0) {
-            Builder alert = new Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.alert_formpago_fields, null);
 
-            LayoutInflater inflater = getActivity().getLayoutInflater();
-            View view = inflater.inflate(R.layout.alert_formpago_fields, null);
-            alert.setView(view);
+        final Spinner sFormpagos = (Spinner) view.findViewById(R.id.sFormpagos);
 
-            alert.setTitle("Seleccione la Forma de Pago");
-            alert.setMessage("Para proseguir con la compra, debe elegir la forma de pago y completar los campos que se pidan a continuación:");
+        formpagos = new ArrayList<>();
+        formpagos.add(""); //To make the first item of the spinner blank
+        formpagos.addAll(sqLiteHelper.fillArrayList("formpagos", "descripcion"));
 
-            final Spinner sFormpagos = (Spinner) view.findViewById(R.id.sFormpagos);
+        ArrayAdapter<String> arrayFormpagos = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, formpagos);
+        arrayFormpagos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sFormpagos.setAdapter(arrayFormpagos);
+        sFormpagos.setOnItemSelectedListener(this);
+        sFormpagos.setVisibility(View.VISIBLE);
 
-            formpagos = new ArrayList<>();
-            formpagos.add(""); //To make the first item of the spinner blank
-            formpagos.addAll(sqLiteHelper.fillArrayList("formpagos", "descripcion"));
+        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .setTitle("Seleccione la Forma de Pago")
+                .setMessage("Para proseguir con la compra, debe elegir la forma de pago y completar los campos que se pidan a continuación:")
+                .setPositiveButton("Aceptar", null)
+                .setNegativeButton("Cancelar", null)
+                .create();
 
-            ArrayAdapter<String> arrayFormpagos = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, formpagos);
-            arrayFormpagos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sFormpagos.setAdapter(arrayFormpagos);
-            sFormpagos.setOnItemSelectedListener(this);
-            sFormpagos.setVisibility(View.VISIBLE);
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
-            alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    cliente.setFormpago(formpagos.get(posicionFormpagos));
-                }
-            });
+            @Override
+            public void onShow(DialogInterface dialog) {
 
-            alert.setNegativeButton("Cancelar", null);
-            alert.show();
+                Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
 
-        } else {
-            muestraAviso("Pizza no añadida", "Debe hacer almenos la compra de una pizza para realizar el pedido!", false);
-        }
+                    @Override
+                    public void onClick(View view) {
+                        if (noErrors(posicionFormpagos)) {
+                            albaran = new Albaran(cliente.getCliente(), sqLiteHelper.getCurrentDate(), formpagos.get(posicionFormpagos));
+                            mensajeRealizarPedido();
+                            alertDialog.dismiss();
+                        }
+                    }
+
+                });
+
+            }
+
+        });
+
+        alertDialog.show();
 
     }
 
@@ -185,11 +204,9 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 
         boolean correct = true;
 
-        switch (pos) {
-            case 0:
-                correct = false;
-                muestraToast("No se ha seleccionado ningun valor en forma de pago.");
-                break;
+        if (pos == 0) {
+            correct = false;
+            muestraToast("No se ha seleccionado ningun valor en forma de pago.");
         }
 
         return correct;
@@ -212,28 +229,61 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 
     }
 
-    //    private boolean compruebaExiste(String dni){
-//        sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 2);
-//        SQLiteDatabase rb = sqLiteHelper.getReadableDatabase();
-//        Cursor c1=rb.rawQuery("Select * from clientes where dni='"+dni + "'",null);
-//        if (c1.moveToFirst()){
-//            return true;
-//        }else{
-//            return false;
-//        }
-//    }
-//
-    //TODO HACER INSERTAR EN REALIZAR PEDIDOS
     private void insertarPedidos() {
+
         int idPedido = sqLiteHelper.getMaxId("pedidos", "pedido") + 1;
 
-        for (PedidoPizza pedidoPizza : pedidoPizzas) {
+        String[] dni = new String[]{Integer.toString(cliente.getCliente())};
+        Cursor c = sqLiteHelper.select("albaranes", null, "cliente = ?", dni, null, null, null);
 
+        int albaran = -1;
+        if (c.moveToFirst()) {
+            albaran = c.getInt(0);
+        } else {
+
+
+            String[] descripcionFormpago = new String[]{formpagos.get(posicionFormpagos)};
+            Cursor cursor = sqLiteHelper.select("formpagos", null, "descripcion = ?", descripcionFormpago, null, null, null);
+            String formpago = "";
+            if (c.moveToFirst()) {
+                formpago = c.getString(0);
+            }
+
+            ContentValues values = new ContentValues();
+            values.put("cliente", cliente.getCliente());
+            values.put("fecha_albaran", sqLiteHelper.getCurrentDate());
+            values.put("formpago", formpago);
+            sqLiteHelper.insert("albaranes", null, values);
+            albaran = sqLiteHelper.getMaxId("albaranes", "albaran") + 1;
         }
 
         for (PedidoPizza pedidoPizza : pedidoPizzas) {
 
+            ContentValues values = new ContentValues();
+            values.put("pedido", idPedido);
+            values.put("articulo", pedidoPizza.getPizza());
+            values.put("tipo", 1);
+            values.put("albaran", albaran);
+            sqLiteHelper.insert("pedidos", null, values);
+// TODO HACER QUE INSERTE EN PEDIDOS_PIZZAS Y EN PEDIDOS_BEBIDAS
+//            ContentValues val = new ContentValues();
+//            values.put("pedido", idPedido);
+//            values.put("articulo", pedidoPizza.getPizza());
+//            values.put("tipo", 1);
+//            values.put("albaran", albaran);
+//            sqLiteHelper.insert("pedidos_pizzas", null, val);
         }
+
+        for (PedidoBebida pedidoBebida : pedidoBebidas) {
+            ContentValues values = new ContentValues();
+            values.put("pedido", idPedido);
+            values.put("articulo", pedidoBebida.getBebida());
+            values.put("tipo", 2);
+            values.put("albaran", albaran);
+            sqLiteHelper.insert("pedidos", null, values);
+
+        }
+
     }
 //
 //    private void insertarPizzas() {
@@ -255,8 +305,8 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 //        sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 2);
 //        SQLiteDatabase db = sqLiteHelper.getWritableDatabase();
 //
-//        for (PedidoBebida pedidoBebida : this.pedidoBebida) {
-//            db.execSQL("INSERT INTO bebidas (nombre,cantidad) VALUES (" + pedidoBebida.getBebida() + "," + pedidoBebida.getCantidad() + ")");
+//        for (PedidoBebida pedidoBebidas : this.pedidoBebidas) {
+//            db.execSQL("INSERT INTO bebidas (nombre,cantidad) VALUES (" + pedidoBebidas.getBebida() + "," + pedidoBebidas.getCantidad() + ")");
 //            SQLiteDatabase sb = sqLiteHelper.getReadableDatabase();
 //            Cursor c = sb.rawQuery("SELECT MAX(idBebida) FROM bebidas", null);
 //            if (c.moveToFirst()) {
@@ -284,10 +334,10 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     }
 
     private void muestraAviso(String title, String message, boolean close) {
-        Builder dlgAlert  = new Builder(getActivity());
+        Builder dlgAlert = new Builder(getActivity());
         dlgAlert.setTitle(title);
         dlgAlert.setMessage(message);
-        if(close) {
+        if (close) {
             dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(getActivity(), PantallaInicio.class);
@@ -312,14 +362,15 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 
     /**
      * Dependiendo del precio a pagar del pedido se hara un regalo u otro.
+     *
      * @param total precio total del pedido
      * @return premio por la compra
      */
-    public int getPremio(double total) {
-        if(total>=33){
+    public int muestraPremio(double total) {
+        if (total >= 33) {
             muestraNotificacion("Aviso Cebanc Pizza", "Regalo Recibido!", "Muñeco Android y vale para el comedor de Cebanc", System.currentTimeMillis() + 3000);
             return 2;
-        } else if (total>=20) {
+        } else if (total >= 20) {
             muestraNotificacion("Aviso Cebanc Pizza", "Regalo Recibido!", "Muñeco Android", System.currentTimeMillis() + 3000);
             return 1;
         } else {
@@ -334,7 +385,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 
     @Override
     public void passBebidaData(ArrayList<PedidoBebida> arrayList) {
-        this.pedidoBebida = arrayList;
+        this.pedidoBebidas = arrayList;
     }
 
 

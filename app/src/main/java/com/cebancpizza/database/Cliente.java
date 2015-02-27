@@ -6,7 +6,7 @@ import android.os.Parcelable;
 public class Cliente implements Parcelable {
 
     int cliente;
-    String nombre, dni, direccion, telefono, formpago;
+    String nombre, dni, direccion, telefono;
 
     @Override
     public int describeContents() {
@@ -20,7 +20,6 @@ public class Cliente implements Parcelable {
         out.writeString(nombre);
         out.writeString(direccion);
         out.writeString(telefono);
-        out.writeString(formpago);
     }
 
     public static final Parcelable.Creator<Cliente> CREATOR = new Parcelable.Creator<Cliente>() {
@@ -39,7 +38,6 @@ public class Cliente implements Parcelable {
         nombre = in.readString();
         direccion = in.readString();
         telefono = in.readString();
-        formpago = in.readString();
     }
 
     /**
@@ -50,15 +48,13 @@ public class Cliente implements Parcelable {
      * @param nombre nombre del cliente
      * @param direccion direccion del cliente
      * @param telefono numero de telefono del cliente
-     * @param formpago forma de pago del cliente
      **/
-    public Cliente(int cliente, String dni, String nombre, String direccion, String telefono, String formpago) {
+    public Cliente(int cliente, String dni, String nombre, String direccion, String telefono) {
         this.cliente = cliente;
         this.dni = dni;
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
-        this.formpago = formpago;
     }
 
     /**
@@ -68,7 +64,7 @@ public class Cliente implements Parcelable {
      * @param direccion direccion del cliente
      * @param telefono numero de telefono del cliente
      **/
-    public Cliente(String dni, String nombre, String direccion, String telefono, String formpago) {
+    public Cliente(String dni, String nombre, String direccion, String telefono) {
         this.dni = dni;
         this.nombre = nombre;
         this.direccion = direccion;
@@ -113,13 +109,5 @@ public class Cliente implements Parcelable {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    public String getFormpago() {
-        return formpago;
-    }
-
-    public void setFormpago(String formpago) {
-        this.formpago = formpago;
     }
 }

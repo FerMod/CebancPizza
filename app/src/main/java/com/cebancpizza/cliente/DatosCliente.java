@@ -310,7 +310,7 @@ public class DatosCliente extends ActionBarActivity {
      * Metodo para pasar a la siguiente pantalla
      */
     public void irSiguiente(){
-        Cliente cliente = new Cliente(etDni.getText().toString(), etNombre.getText().toString(), etDireccion.getText().toString(), etTelefono.getText().toString(), null);
+        Cliente cliente = new Cliente(etDni.getText().toString(), etNombre.getText().toString(), etDireccion.getText().toString(), etTelefono.getText().toString());
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("cliente", cliente);
         startActivity(intent);

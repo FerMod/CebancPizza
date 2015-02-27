@@ -46,9 +46,21 @@ public class Albaran implements Parcelable{
      * @param fechaAlbaran fecha de la creacion del albaran
      * @param formpago id formpago
      */
-
     public Albaran(int albaran, int cliente, String fechaAlbaran, String formpago) {
         this.albaran = albaran;
+        this.cliente = cliente;
+        this.fechaAlbaran = fechaAlbaran;
+        this.formpago = formpago;
+    }
+
+    /**
+     * Campos de albaran con id autogenerada:
+     *
+     * @param cliente id cliente
+     * @param fechaAlbaran fecha de la creacion del albaran
+     * @param formpago id formpago
+     */
+    public Albaran(int cliente, String fechaAlbaran, String formpago) {
         this.cliente = cliente;
         this.fechaAlbaran = fechaAlbaran;
         this.formpago = formpago;

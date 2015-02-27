@@ -97,7 +97,7 @@ public class AdminClientes extends Fragment {
         Cursor c = sqLiteHelper.select("clientes", null, null, null, null, null, null);
         if (c.moveToFirst()) {
             do {
-                clientes.add(new Cliente(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4), c.getString(5)));
+                clientes.add(new Cliente(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4)));
             } while(c.moveToNext());
         }
     }
@@ -160,7 +160,6 @@ public class AdminClientes extends Fragment {
         etTexto2.setHint("nombre (String)");
         etTexto3.setHint("direccion (String)");
         etTexto4.setHint("telefono (String)");
-        etTexto5.setHint("formpago (String)");
 
         //Filter for EditText that limits the number of characters to 9
         InputFilter[] filterArray = new InputFilter[1];
@@ -176,7 +175,7 @@ public class AdminClientes extends Fragment {
         etTexto3.setVisibility(View.VISIBLE);
         etTexto4.setVisibility(View.VISIBLE);
         etTexto4.setFilters(filterArray);
-        etTexto5.setVisibility(View.VISIBLE);
+        etTexto5.setVisibility(View.GONE);
         etTexto6.setVisibility(View.GONE);
 
         alert.setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
@@ -186,16 +185,14 @@ public class AdminClientes extends Fragment {
                 String nombre = etTexto2.getText().toString();
                 String direccion = etTexto3.getText().toString();
                 String telefono = etTexto4.getText().toString();
-                String formpago = etTexto5.getText().toString();
 
-                if (noErrors(dni, nombre, direccion, telefono, formpago)) {
+                if (noErrors(dni, nombre, direccion, telefono)) {
 
                     ContentValues values = new ContentValues();
                     values.put("dni", dni);
                     values.put("nombre", nombre);
                     values.put("direccion", direccion);
                     values.put("telefono", telefono);
-                    values.put("formpago", formpago);
 
                     sqLiteHelper.insert("clientes", null, values);
 
@@ -203,7 +200,7 @@ public class AdminClientes extends Fragment {
                     Cursor c = sqLiteHelper.select("clientes", columns, null, null, null, null, null);
                     if (c.moveToFirst()) {
                         Log.wtf("(cliente) c.getInt(0)", "[c.getInt(0) -> " + c.getInt(0) + "]");
-                        clientes.add( new Cliente(c.getInt(0), values.getAsString("dni"), values.getAsString("nombre"), values.getAsString("direccion"), values.getAsString("telefono"), values.getAsString("formpago")) );
+                        clientes.add( new Cliente(c.getInt(0), values.getAsString("dni"), values.getAsString("nombre"), values.getAsString("direccion"), values.getAsString("telefono")) );
                     }
 
                     adaptador.notifyDataSetChanged();
@@ -246,7 +243,6 @@ public class AdminClientes extends Fragment {
         etTexto2.setHint("nombre (String)");
         etTexto3.setHint("direccion (String)");
         etTexto4.setHint("telefono (String)");
-        etTexto5.setHint("formpago (String)");
 
         String[] selectionArgs = new String[] {Integer.toString(clientes.get(selectedItemIndex).getCliente())};
         Cursor c = sqLiteHelper.select("clientes", null, "cliente = ?", selectionArgs, null, null, null);
@@ -256,7 +252,6 @@ public class AdminClientes extends Fragment {
             etTexto2.setText(c.getString(2));
             etTexto3.setText(c.getString(3));
             etTexto4.setText(c.getString(4));
-            etTexto5.setText(c.getString(5));
         }
 
         //Filter for EditText that limits the number of characters to 9
@@ -271,7 +266,7 @@ public class AdminClientes extends Fragment {
         etTexto3.setVisibility(View.VISIBLE);
         etTexto4.setVisibility(View.VISIBLE);
         etTexto4.setFilters(filterArray);
-        etTexto5.setVisibility(View.VISIBLE);
+        etTexto5.setVisibility(View.GONE);
         etTexto6.setVisibility(View.GONE);
 
 
@@ -283,9 +278,8 @@ public class AdminClientes extends Fragment {
                 String nombre = etTexto2.getText().toString();
                 String direccion = etTexto3.getText().toString();
                 String telefono = etTexto4.getText().toString();
-                String formpago = etTexto5.getText().toString();
 
-                if (noErrors(dni, nombre, direccion, telefono, formpago)) {
+                if (noErrors(dni, nombre, direccion, telefono)) {
 
                     ContentValues values = new ContentValues();
                     values.put("cliente", Integer.parseInt(cliente));
@@ -293,11 +287,10 @@ public class AdminClientes extends Fragment {
                     values.put("nombre", nombre);
                     values.put("direccion", direccion);
                     values.put("telefono", telefono);
-                    values.put("formpago", formpago);
 
                     String[] whereArgs = new String[]{Integer.toString(clientes.get(selectedItemIndex).getCliente())};
                     sqLiteHelper.update("clientes", values, "cliente = ?", whereArgs);
-                    clientes.set(selectedItemIndex,new Cliente(values.getAsInteger("cliente"), values.getAsString("dni"), values.getAsString("nombre"), values.getAsString("direccion"), values.getAsString("telefono"), values.getAsString("formpago")) );
+                    clientes.set(selectedItemIndex,new Cliente(values.getAsInteger("cliente"), values.getAsString("dni"), values.getAsString("nombre"), values.getAsString("direccion"), values.getAsString("telefono")) );
                     adaptador.notifyDataSetChanged();
                     muestraToast("Cambios Guardados.");
                 }
@@ -313,9 +306,9 @@ public class AdminClientes extends Fragment {
         alert.show();
     }
 
-    public boolean noErrors(String dni, String nombre, String direccion, String telefono, String formpago) {
+    public boolean noErrors(String dni, String nombre, String direccion, String telefono) {
 
-        Log.wtf("noErrors(dni, nombre, direccion, formpago)", "[dni -> " + dni + "] [nombre -> " + nombre + "] [direccion -> " + direccion + "] [telefono -> " + telefono + "] [formpago -> " + formpago + "]");
+        Log.wtf("noErrors(dni, nombre, direccion, formpago)", "[dni -> " + dni + "] [nombre -> " + nombre + "] [direccion -> " + direccion + "] [telefono -> " + telefono + "]");
 
         boolean correct = true;
 
@@ -337,11 +330,6 @@ public class AdminClientes extends Fragment {
         if(telefono.equals("") || !onlyInteger(telefono)) {
             correct = false;
             muestraToast("Valor en el campo \"telefono\" erroneo.");
-        }
-
-        if(formpago.equals("")) {
-            correct = false;
-            muestraToast("Valor en el campo \"formpago\" erroneo.");
         }
 
         return correct;
@@ -426,7 +414,7 @@ public class AdminClientes extends Fragment {
             tvTexto4.setText(clientes.get(position).getTelefono());
 
             TextView tvTexto5 = (TextView)item.findViewById(R.id.tvTexto5);
-            tvTexto5.setText(clientes.get(position).getFormpago());
+            tvTexto5.setVisibility(View.GONE);
 
             TextView tvTexto6 = (TextView)item.findViewById(R.id.tvTexto6);
             tvTexto6.setVisibility(View.GONE);

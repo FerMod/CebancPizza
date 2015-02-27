@@ -109,13 +109,6 @@ public class NuevaPizza extends ActionBarActivity implements AdapterView.OnItemS
                 descartarCambios();
             }
         });
-        bAceptar = (Button) this.findViewById(R.id.bAceptar);
-        bAceptar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onAceptarPressed(v);
-            }
-        });
 
         Log.wtf(getClass().getSimpleName(), "[accion -> " + accion + "]");
 

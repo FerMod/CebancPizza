@@ -71,7 +71,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         } else if(num == 1 && resumenPedidoBebidas != null) {
             resumenPedidoBebidas.iniciarPedidoBebida(1);
         } else if(num == 2 && realizarPedido != null) {
-            realizarPedido.showAlertFormpago();
+            realizarPedido.finalizarPedido();
         }
     }
 

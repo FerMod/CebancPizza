@@ -182,7 +182,7 @@ public class ResumenPedidoPizzas extends Fragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         AdapterContextMenuInfo info = (AdapterContextMenuInfo)menuInfo;
-        menu.setHeaderTitle(Integer.toString(pedidoPizzas.get(info.position).getPedidoPizza()));
+        menu.setHeaderTitle(pizzas.get(pedidoPizzas.get(info.position).getPizza()));
         String[] menuItems = getResources().getStringArray(R.array.longclick_menu);
         for (int i = 0; i<menuItems.length; i++) {
             menu.add(Menu.NONE, i, i, menuItems[i]);

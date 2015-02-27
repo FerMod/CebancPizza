@@ -46,9 +46,7 @@ public class CebancPizzaSQLiteHelper extends SQLiteOpenHelper {
             "dni TEXT, " +
             "nombre TEXT, " +
             "direccion TEXT, " +
-            "telefono TEXT, " +
-            "formpago TEXT, " +
-            "FOREIGN KEY(formpago) REFERENCES formpagos(formpago) " +
+            "telefono TEXT " +
             ")";
 
     String sqlCreatePedidosPizzas ="CREATE TABLE pedidos_pizzas " +
@@ -79,14 +77,15 @@ public class CebancPizzaSQLiteHelper extends SQLiteOpenHelper {
 
     String sqlCreatePedidos ="CREATE TABLE pedidos " +
             "( " +
-            "pedido INTEGER PRIMARY KEY, " +
+            "pedido INTEGER, " +
             "articulo INTEGER, " +
             "tipo INTEGER, " +
             "albaran INTEGER, " +
+            "PRIMARY KEY (pedido, articulo, tipo), " +
             "FOREIGN KEY(articulo) REFERENCES pedidos_bebidas(pedido_bebida), " +
+            "FOREIGN KEY(articulo) REFERENCES pedidos_pizzas(pedido_pizza), " +
             "FOREIGN KEY(tipo) REFERENCES tipos(tipo), " +
-            "FOREIGN KEY(albaran) REFERENCES albaranes(albaran), " +
-            "FOREIGN KEY(articulo) REFERENCES pedidos_pizzas(pedido_pizza) " +
+            "FOREIGN KEY(albaran) REFERENCES albaranes(albaran) " +
             ") ";
 
     String sqlCreateTipos ="CREATE TABLE tipos " +
@@ -153,6 +152,7 @@ public class CebancPizzaSQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(sqlInitTamanos);
         db.execSQL(sqlInitMasas);
         db.execSQL(sqlInitBebidas);
+        db.execSQL(sqlInitTipos);
         db.execSQL(sqlInitFormpagos);
 
         //  insert into clientes (dni, nombre, direccion, formpago, telefono) values (123, 'Paco', 'CasaPaco', 'C', 123456789);
