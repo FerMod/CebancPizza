@@ -241,9 +241,9 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
             albaran = c.getInt(0);
         } else {
 
-
             String[] descripcionFormpago = new String[]{formpagos.get(posicionFormpagos)};
-            Cursor cursor = sqLiteHelper.select("formpagos", null, "descripcion = ?", descripcionFormpago, null, null, null);
+            String[] columns = new String[] {"formpago"};
+            Cursor cursor = sqLiteHelper.select("formpagos", columns, "descripcion = ?", descripcionFormpago, null, null, null);
             String formpago = "";
             if (cursor.moveToFirst()) {
                 formpago = c.getString(0);
