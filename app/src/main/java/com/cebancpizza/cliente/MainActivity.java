@@ -190,7 +190,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
     }
-    sdaasdasd
 
     @Override
     public void passBebidaData(double totalBebidas) {
