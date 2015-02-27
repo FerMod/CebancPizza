@@ -13,25 +13,30 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".cliente.DatosCliente"
             android:label="Datos Personales" />
+
         <activity
             android:name=".cliente.MainActivity"
             android:label="Menu" />
+
         <activity
             android:name=".cliente.NuevaPizza"
             android:label="Nueva Pizza" />
+
         <activity
             android:name=".cliente.NuevaBebida"
             android:label="Nueva Bebida" />
+
         <activity
             android:name=".admin.AdminMainActivity"
             android:label="Modo Admin" />
+
     </application>
 
 </manifest>
