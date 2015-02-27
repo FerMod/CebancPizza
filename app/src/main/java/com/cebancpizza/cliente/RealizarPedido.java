@@ -38,15 +38,12 @@ import static android.widget.AdapterView.OnItemSelectedListener;
 
 public class RealizarPedido extends Fragment implements MainActivity.OnMainActivityListener, OnItemSelectedListener {
 
-    private String premio;
-
     private TextView tvTotalPizzas, tvTotalBebidas, tvSumaTotales, tvNombre, tvDni, tvDireccion, tvTelefono;
     private String SECTION_NUMBER = "section_number";
     private double totalPizzas, totalBebidas, total;
     private Cliente cliente;
-    private Albaran albaran;
-    private ArrayList<PedidoBebida> pedidoBebidas;
-    private ArrayList<PedidoPizza> pedidoPizzas;
+    private ArrayList<PedidoBebida> arrayPedidosBebidas;
+    private ArrayList<PedidoPizza> arrayPedidosPizzas;
     private CebancPizzaSQLiteHelper sqLiteHelper;
     private int posicionFormpagos;
     private ArrayList<String> formpagos;
@@ -181,7 +178,11 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
                     @Override
                     public void onClick(View view) {
                         if (noErrors(posicionFormpagos)) {
-                            albaran = new Albaran(cliente.getCliente(), sqLiteHelper.getCurrentDate(), formpagos.get(posicionFormpagos));
+                            ContentValues values = new ContentValues();
+                            values.put("cliente", cliente.getCliente());
+                            values.put("fecha_albaran", sqLiteHelper.getCurrentDate());
+                            values.put("formpago", formpagos.get(posicionFormpagos));
+                            sqLiteHelper.insert("albaranes", null, values);
                             mensajeRealizarPedido();
                             alertDialog.dismiss();
                         }
@@ -236,7 +237,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
         String[] dni = new String[]{Integer.toString(cliente.getCliente())};
         Cursor c = sqLiteHelper.select("albaranes", null, "cliente = ?", dni, null, null, null);
 
-        int albaran = -1;
+        int albaran;
         if (c.moveToFirst()) {
             albaran = c.getInt(0);
         } else {
@@ -245,7 +246,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
             String[] descripcionFormpago = new String[]{formpagos.get(posicionFormpagos)};
             Cursor cursor = sqLiteHelper.select("formpagos", null, "descripcion = ?", descripcionFormpago, null, null, null);
             String formpago = "";
-            if (c.moveToFirst()) {
+            if (cursor.moveToFirst()) {
                 formpago = c.getString(0);
             }
 
@@ -257,24 +258,25 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
             albaran = sqLiteHelper.getMaxId("albaranes", "albaran") + 1;
         }
 
-        for (PedidoPizza pedidoPizza : pedidoPizzas) {
-
+        for (PedidoPizza pedidoPizza : arrayPedidosPizzas) {
             ContentValues values = new ContentValues();
             values.put("pedido", idPedido);
             values.put("articulo", pedidoPizza.getPizza());
             values.put("tipo", 1);
             values.put("albaran", albaran);
             sqLiteHelper.insert("pedidos", null, values);
-// TODO HACER QUE INSERTE EN PEDIDOS_PIZZAS Y EN PEDIDOS_BEBIDAS
-//            ContentValues val = new ContentValues();
-//            values.put("pedido", idPedido);
-//            values.put("articulo", pedidoPizza.getPizza());
-//            values.put("tipo", 1);
-//            values.put("albaran", albaran);
-//            sqLiteHelper.insert("pedidos_pizzas", null, val);
+
+            values = new ContentValues();
+            values.put("pedido", idPedido);
+            values.put("pizza", pedidoPizza.getPizza());
+            values.put("masa", pedidoPizza.getMasa());
+            values.put("tamano", pedidoPizza.getTamano());
+            values.put("cantidad", pedidoPizza.getCantidad());
+            values.put("precio", pedidoPizza.getPrecio());
+            sqLiteHelper.insert("pedidos_pizzas", null, values);
         }
 
-        for (PedidoBebida pedidoBebida : pedidoBebidas) {
+        for (PedidoBebida pedidoBebida : arrayPedidosBebidas) {
             ContentValues values = new ContentValues();
             values.put("pedido", idPedido);
             values.put("articulo", pedidoBebida.getBebida());
@@ -282,39 +284,15 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
             values.put("albaran", albaran);
             sqLiteHelper.insert("pedidos", null, values);
 
+            values = new ContentValues();
+            values.put("pedido", idPedido);
+            values.put("bebida", pedidoBebida.getBebida());
+            values.put("cantidad", pedidoBebida.getCantidad());
+            values.put("precio", pedidoBebida.getPrecio());
+            sqLiteHelper.insert("pedidos_bebidas", null, values);
         }
 
     }
-//
-//    private void insertarPizzas() {
-//        sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 2);
-//        SQLiteDatabase db = sqLiteHelper.getWritableDatabase();
-//
-//        for (PedidoPizza pedidoPizza : pedidoPizzas) {
-//            db.execSQL("INSERT INTO pizzas (nombre, masa, tamano, cantidad) VALUES (" + pedidoPizza.getPizza() + "," + pedidoPizza.getMasa() + "," + pedidoPizza.getTamano() + "," + pedidoPizza.getCantidad() + ")");
-//            SQLiteDatabase sb = sqLiteHelper.getReadableDatabase();
-//            Cursor c = sb.rawQuery("SELECT MAX(idPizza) FROM pizzas", null);
-//            if (c.moveToFirst()) {
-//                idPizza = c.getInt(0);
-//            }
-//            db.execSQL("INSERT INTO lineas (id_pedido, id_articulo, Tipo) VALUES (" + idPedido + ", " + idPizza + ", " + 0 + ")");
-//        }
-//    }
-//
-//    private void insertarBebidas() {
-//        sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 2);
-//        SQLiteDatabase db = sqLiteHelper.getWritableDatabase();
-//
-//        for (PedidoBebida pedidoBebidas : this.pedidoBebidas) {
-//            db.execSQL("INSERT INTO bebidas (nombre,cantidad) VALUES (" + pedidoBebidas.getBebida() + "," + pedidoBebidas.getCantidad() + ")");
-//            SQLiteDatabase sb = sqLiteHelper.getReadableDatabase();
-//            Cursor c = sb.rawQuery("SELECT MAX(idBebida) FROM bebidas", null);
-//            if (c.moveToFirst()) {
-//                idBebida = c.getInt(0);
-//            }
-//            db.execSQL("INSERT INTO lineas (id_pedido, id_articulo, Tipo) VALUES (" + idPedido + ", " + idBebida + ", " + 1 + ")");
-//        }
-//    }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void muestraNotificacion(String ticker, String title, String message, long time) {
@@ -380,12 +358,12 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 
     @Override
     public void passPizzaData(ArrayList<PedidoPizza> arrayList) {
-        this.pedidoPizzas = arrayList;
+        this.arrayPedidosPizzas = arrayList;
     }
 
     @Override
     public void passBebidaData(ArrayList<PedidoBebida> arrayList) {
-        this.pedidoBebidas = arrayList;
+        this.arrayPedidosBebidas = arrayList;
     }
 
 
