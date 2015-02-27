@@ -1,7 +1,6 @@
 package com.cebancpizza.cliente;
 
 import android.app.Activity;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,7 +37,7 @@ public class ResumenPedidoPizzas extends Fragment {
     private AdaptadorPedidoPizza adaptador;
     private OnResumenPedidoPizzasListener onResumenPedidoPizzasListener;
     private int selectedItemIndex, menuItemIndex;
-    private String ARRAY_VALUE = "array_avalue";
+    private String ARRAY_VALUE = "array_value";
 
     public ResumenPedidoPizzas() {
     }
@@ -71,7 +70,7 @@ public class ResumenPedidoPizzas extends Fragment {
 
     public interface OnResumenPedidoPizzasListener {
         public void passPizzaData(double totalPizzas);
-        public void passPizzaData(PedidoPizza pedidoPizza);
+        //public void passPizzaData(PedidoPizza pedidoPizza);
         public void passPizzaData(ArrayList<PedidoPizza> arrayList);
     }
 
@@ -133,11 +132,7 @@ public class ResumenPedidoPizzas extends Fragment {
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(ARRAY_VALUE, pedidoPizzas);
-    }
+
 
     @Nullable
     @Override
@@ -218,14 +213,14 @@ public class ResumenPedidoPizzas extends Fragment {
         return true;
     }
 
-    private void muestraAviso(String title, String message) {
-        Builder dlgAlert  = new Builder(getActivity());
-        dlgAlert.setTitle(title);
-        dlgAlert.setMessage(message);
-        dlgAlert.setPositiveButton("OK", null);
-        dlgAlert.setCancelable(true);
-        dlgAlert.create().show();
-    }
+//    private void muestraAviso(String title, String message) {
+//        Builder dlgAlert  = new Builder(getActivity());
+//        dlgAlert.setTitle(title);
+//        dlgAlert.setMessage(message);
+//        dlgAlert.setPositiveButton("OK", null);
+//        dlgAlert.setCancelable(true);
+//        dlgAlert.create().show();
+//    }
 
     class AdaptadorPedidoPizza extends ArrayAdapter<PedidoPizza> {
 

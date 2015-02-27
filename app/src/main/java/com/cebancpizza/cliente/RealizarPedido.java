@@ -26,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cebancpizza.R;
-import com.cebancpizza.database.Albaran;
 import com.cebancpizza.database.CebancPizzaSQLiteHelper;
 import com.cebancpizza.database.Cliente;
 import com.cebancpizza.database.PedidoBebida;

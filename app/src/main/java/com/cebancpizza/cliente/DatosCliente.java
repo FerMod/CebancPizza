@@ -26,9 +26,6 @@ public class DatosCliente extends ActionBarActivity {
 
     private EditText etNombre, etDni, etDireccion, etTelefono;
     private boolean doubleBackToExitPressedOnce;
-    private Button bAceptar, bModificar,bSig,bBuscar;
-    private int telefono,ident,accionA;
-    private String nombre,direccion,dni;
     private CebancPizzaSQLiteHelper sqLiteHelper;
     private String ADMIN_PASSWORD = "admin";
 
@@ -60,147 +57,36 @@ public class DatosCliente extends ActionBarActivity {
         });
         etDireccion = (EditText) this.findViewById(R.id.etDireccion);
         etTelefono = (EditText) this.findViewById(R.id.etTelefono);
-//        bSig = (Button) this.findViewById(R.id.btnSiguiente);
-//        bAceptar = (Button) this.findViewById(R.id.bAceptar);
-//        bAceptar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onAceptarPressed(v);
-//            }
-//        });
-//        bBuscar = (Button) this.findViewById(R.id.bBuscar);
-//        bBuscar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                buscarCliente(v);
-//            }
-//        });
-//        bModificar = (Button) this.findViewById(R.id.bModificar);
-//        bModificar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onModificarPressed(v);
-//            }
-//        });
 
         sqLiteHelper = new CebancPizzaSQLiteHelper(this, "CebancPizza", null, 1);
-
-//        ContentValues values = new ContentValues();
-//        values.put("descripcion", "PizzaNuevaConContentValues");
-//        values.put("pr_vent", 999.5);
-//        sqLiteHelper.insert("pizzas", null, values);
-
-//        ContentValues values = new ContentValues();
-//        values.put("descripcion", "PizzaEditada");
-//        values.put("pr_vent", 23.3);
-//        sqLiteHelper.update("pizzas", values, "pizza = 8", null);
-
-//        sqLiteHelper.delete("pizzas", "pizza = 6", null);
-
-//        String[] columns = new String[] {"pizza", "descripcion", "pr_vent"};
-//        Cursor c = sqLiteHelper.select("pizzas", columns, null, null, null, null, null);
-//
-//        //Nos aseguramos de que existe al menos un registro
-//        if (c.moveToFirst()) {
-//
-//            //Recorremos el cursor hasta que no haya más registros
-//            do {
-//                muestraToast(c.getInt(0) + " | " + c.getString(1) + " | " + c.getDouble(2));
-//            } while(c.moveToNext());
-//
-//        }
-
-
     }
 
-//        Bundle dato = this.getIntent().getExtras();
-//        if (!dato.getBoolean("normal")) {
-//            accionA = dato.getInt("accionA");
-//            ident = dato.getInt("identificador");
-//        }
-//        if (accionA>=1&&accionA<=3) {
-//            baseSQLite = new BaseSQLite(this, "CebancPizza", null, 1);
-//            Log.e("BASEDATOS","creada");
-//        }
-//        Log.e("ACCION", accionA + "");
-//        if (accionA == 1) {
-//            //insertar
-//            muestraToast("Inserta los datos del cliente");
-//            bSig.setVisibility(View.GONE);
-//            bAceptar.setVisibility(View.VISIBLE);
-//
-//            bModificar.setVisibility(View.GONE);
-//        } else if (accionA == 2) {
-//            //actualizar
-//
-//            SQLiteDatabase sb = sqLiteHelper.getReadableDatabase();
-//            Cursor c = sb.rawQuery("select * from clientes where dni='"+ident+"'", null);
-//            if (c.moveToFirst()) {
-//
-//                nombre = c.getString(1);
-//                direccion = c.getString(2);
-//                telefono = c.getInt(3);
-//                dni = c.getString(0);
-//                etDni.setText(ident+"");
-//                etDni.setEnabled(false);
-//                etNombre.setText(nombre);
-//                etDireccion.setText(direccion);
-//                etTelefono.setText(Integer.toString(telefono));
-//            } else {
-//                muestraToast("No existe EL CLIENTE");
-//                finish();
-//            }
-//            bSig.setVisibility(View.GONE);
-//            bAceptar.setVisibility(View.GONE);
-//            bBuscar.setVisibility(View.GONE);
-//            bModificar.setVisibility(View.VISIBLE);
-//
-//
-//
-//        } else if(accionA==3){
-//            //eliminar
-//            bSig.setVisibility(View.GONE);
-//            SQLiteDatabase sb = sqLiteHelper.getReadableDatabase();
-//            Cursor c = sb.rawQuery("SELECT * from clientes WHERE dni=" + ident, null);
-//            if (c.moveToFirst()) {
-//                nombre = c.getString(1);
-//                direccion = c.getString(2);
-//                telefono = c.getInt(3);
-//                etDni.setText(ident + "");
-//                etNombre.setText(nombre);
-//                etDireccion.setText(direccion);
-//                etTelefono.setText(Integer.toString(telefono));
-//
-//                new AlertDialog.Builder(this)
-//                        .setIcon(android.R.drawable.ic_dialog_alert)
-//                        .setMessage("Seguro de quiere borrar este registro?\nNombre: " + nombre + "\nDireccion: " + direccion + "\nTelefono: " + telefono)
-//                        .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-//
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                SQLiteDatabase dl=sqLiteHelper.getWritableDatabase();
-//                                dl.execSQL("DELETE FROM clientes WHERE dni="+ident);
-//                                finish();
-//
-//                            }
-//
-//                        })
-//                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                finish();
-//                            }
-//                        })
-//                        .show();
-//
-//            } else {
-//                muestraToast("No existe");
-//                finish();
-//            }
-//
-//
-//        }
-//    }
+    /*
+        ContentValues values = new ContentValues();
+        values.put("descripcion", "PizzaNuevaConContentValues");
+        values.put("pr_vent", 999.5);
+        sqLiteHelper.insert("pizzas", null, values);
+
+        ContentValues values = new ContentValues();
+        values.put("descripcion", "PizzaEditada");
+        values.put("pr_vent", 23.3);
+        sqLiteHelper.update("pizzas", values, "pizza = 8", null);
+
+        sqLiteHelper.delete("pizzas", "pizza = 6", null);
+
+        String[] columns = new String[] {"pizza", "descripcion", "pr_vent"};
+        Cursor c = sqLiteHelper.select("pizzas", columns, null, null, null, null, null);
+
+        //Nos aseguramos de que existe al menos un registro
+        if (c.moveToFirst()) {
+
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                muestraToast(c.getInt(0) + " | " + c.getString(1) + " | " + c.getDouble(2));
+            } while(c.moveToNext());
+
+        }
+        */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -281,19 +167,6 @@ public class DatosCliente extends ActionBarActivity {
         }
 
     }
-//    private void onAceptarPressed(View view){
-//        //SQL insert
-//        SQLiteDatabase db = baseSQLite.getWritableDatabase();
-//        db.execSQL("INSERT INTO Clientes (dni,nombre,direccion,telefono) VALUES ('"+etDni.getText().toString()+"','"+etNombre.getText().toString()+"','"+etDireccion.getText().toString()+"',"+Integer.parseInt(etTelefono.getText().toString())+")");
-//        finish();
-//    }
-//    private void onModificarPressed(View view){
-//
-//        SQLiteDatabase db = baseSQLite.getWritableDatabase();
-//        //actualizar el registro
-//        db.execSQL("UPDATE Clientes SET nombre='"+etNombre.getText().toString()+"', direccion='"+etDireccion.getText().toString()+"', telefono="+Integer.parseInt(etTelefono.getText().toString())+" WHERE dni="+ident);
-//        finish();
-//    }
 
     /**
      * Muestra un "Toast" con el texto que se le pasa como parametro

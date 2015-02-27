@@ -11,14 +11,14 @@
         android:id="@+id/tvCod"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/texto_subtitulo"
+        android:text="@string/texto_titulo"
         android:textSize="20sp"
         android:textStyle="normal"
         android:gravity="center_vertical|fill_vertical"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_alignBottom="@+id/tvTexto6" />
 
     <TextView
