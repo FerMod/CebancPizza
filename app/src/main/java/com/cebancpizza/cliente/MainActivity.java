@@ -28,8 +28,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private ArrayList<PedidoPizza> pedidoPizzas = new ArrayList<PedidoPizza>();
-    private ArrayList<PedidoBebida> pedidoBebida = new ArrayList<PedidoBebida>();
+    private ArrayList<PedidoPizza> pedidoPizzas = new ArrayList<>();
+    private ArrayList<PedidoBebida> pedidoBebida = new ArrayList<>();
     public CharSequence mTitle, mAddTitle;
     private boolean doubleBackToExitPressedOnce;
     ResumenPedidoPizzas resumenPedidoPizzas;
@@ -199,10 +199,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     @Override
     public void passPizzaData(double totalPizzas) {
         this.totalPizzas = totalPizzas;
-    }
-
-    @Override
-    public void passPizzaData(PedidoPizza pedidoPizza) {
     }
 
     @Override
