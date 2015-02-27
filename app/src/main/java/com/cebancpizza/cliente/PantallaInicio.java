@@ -27,7 +27,6 @@ public class PantallaInicio extends Activity {
      */
     public void irSiguiente(View view){
         Intent intent = new Intent(this, DatosCliente.class);
-        intent.putExtra("normal",true);
         startActivity(intent);
     }
 }
