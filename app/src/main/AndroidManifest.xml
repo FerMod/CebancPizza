@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="cliente.DatosCliente"
+            android:name=".cliente.DatosCliente"
             android:label="Datos Personales" />
         <activity
             android:name=".cliente.MainActivity"
