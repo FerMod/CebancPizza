@@ -128,7 +128,6 @@ public class CebancPizzaSQLiteHelper extends SQLiteOpenHelper {
     String sqlInitFormpagos ="INSERT INTO formpagos (formpago, descripcion) " +
             "VALUES ('C', 'Contado'), ('L1', '30'), ('L2', '30/60'), ('L3', '30/60/90'), ('L4', '30/60/90/120')";
 
-
     public CebancPizzaSQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }

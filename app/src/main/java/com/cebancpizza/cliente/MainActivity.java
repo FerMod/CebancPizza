@@ -1,9 +1,9 @@
 package com.cebancpizza.cliente;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
@@ -24,12 +24,13 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, ResumenPedidoPizzas.OnResumenPedidoPizzasListener, ResumenPedidoBebidas.OnResumenPedidoBebidasListener {
 
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private ArrayList<PedidoPizza> pedidoPizzas = new ArrayList<>();
-    private ArrayList<PedidoBebida> pedidoBebida = new ArrayList<>();
+    private ArrayList<PedidoBebida> pedidoBebidas = new ArrayList<>();
     public CharSequence mTitle, mAddTitle;
     private boolean doubleBackToExitPressedOnce;
     ResumenPedidoPizzas resumenPedidoPizzas;
@@ -38,24 +39,49 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     private double totalPizzas, totalBebidas;
 
     public interface OnMainActivityListener {
-        public void passPizzaData(ArrayList<PedidoPizza> arrayList);
-        public void passBebidaData(ArrayList<PedidoBebida> arrayList);
+        public void passPedidoPizzasData(ArrayList<PedidoPizza> arrayList);
+
+        public void passPedidoBebidasData(ArrayList<PedidoBebida> arrayList);
+
         public void passClienteData(Cliente cliente);
+
         public void passTotalData(double totalPizzas, double totalBebidas);
     }
 
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putParcelableArrayList(ARRAY_PIZZAS_STATE, pedidoPizzas);
+//        outState.putParcelableArrayList(ARRAY_PIZZAS_STATE, pedidoBebidas);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        if (savedInstanceState != null) {
+//            pedidoPizzas = savedInstanceState.getParcelableArrayList(ARRAY_PIZZAS_STATE);
+//            pedidoBebidas = savedInstanceState.getParcelableArrayList(ARRAY_BEBIDAS_STATE);
+//
+//            Log.wtf("resumenPedidoPizzas", "[null -> " + (resumenPedidoPizzas == null) + "]");
+//            Log.wtf("resumenPedidoBebidas", "[null -> " + (resumenPedidoBebidas == null) + "]");
+//
+//            if (resumenPedidoPizzas != null) {
+//                resumenPedidoPizzas.setArrayPizzas(pedidoPizzas);
+//            }
+//
+//            if (resumenPedidoBebidas != null) {
+//                resumenPedidoBebidas.setArrayBebidas(pedidoBebidas);
+//            }
+//        }
+
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getString(R.string.menu_pizzas);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
         this.overridePendingTransition(R.anim.enter_anim_horizontal, R.anim.exit_anim_horizontal);
+
     }
 
     @Override
@@ -65,16 +91,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     @Override
     public void onActionBarButtonPressed(int num) {
-        Log.wtf("onAddPressed("+num+")", "[resumenPedidoPizzas -> " + (resumenPedidoPizzas != null) + "]" + "[resumenPedidoBebidas -> " + (resumenPedidoBebidas != null) + "]"+ "[realizarPedido -> " + (realizarPedido != null) + "]");
-        if(num == 0 && resumenPedidoPizzas != null) {
+        Log.wtf("onAddPressed(" + num + ")", "[resumenPedidoPizzas -> " + (resumenPedidoPizzas != null) + "]" + "[resumenPedidoBebidas -> " + (resumenPedidoBebidas != null) + "]" + "[realizarPedido -> " + (realizarPedido != null) + "]");
+        if (num == 0 && resumenPedidoPizzas != null) {
             resumenPedidoPizzas.iniciarPedidoPizza(1);
-        } else if(num == 1 && resumenPedidoBebidas != null) {
+        } else if (num == 1 && resumenPedidoBebidas != null) {
             resumenPedidoBebidas.iniciarPedidoBebida(1);
-        } else if(num == 2 && realizarPedido != null) {
+        } else if (num == 2 && realizarPedido != null) {
             realizarPedido.finalizarPedido();
         }
     }
-
 
     @Override
     public void onBackPressed() {
@@ -104,7 +129,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
@@ -116,7 +141,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             case 0:
                 mTitle = getString(R.string.menu_pizzas);
                 mAddTitle = getString(R.string.anadir_pizza);
-                resumenPedidoPizzas = new ResumenPedidoPizzas().newInstance(posicion);
+                resumenPedidoPizzas = new ResumenPedidoPizzas();
                 resumenPedidoPizzas.setArrayPizzas(pedidoPizzas);
                 fragmentManager.beginTransaction().replace(R.id.container, resumenPedidoPizzas, mTitle.toString()).commit();
                 break;
@@ -124,7 +149,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 mTitle = getString(R.string.menu_bebidas);
                 mAddTitle = getString(R.string.anadir_bebida);
                 resumenPedidoBebidas = new ResumenPedidoBebidas();
-                resumenPedidoBebidas.setArrayBebidas(pedidoBebida);
+                resumenPedidoBebidas.setArrayBebidas(pedidoBebidas);
                 fragmentManager.beginTransaction().replace(R.id.container, resumenPedidoBebidas, mTitle.toString()).commit();
                 break;
             case 2:
@@ -132,25 +157,37 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 mAddTitle = getString(R.string.finalizar);
                 realizarPedido = new RealizarPedido();
                 realizarPedido.passTotalData(totalPizzas, totalBebidas);
-                realizarPedido.passPizzaData(pedidoPizzas);
-                realizarPedido.passBebidaData(pedidoBebida);
+                realizarPedido.passPedidoPizzasData(pedidoPizzas);
+                realizarPedido.passPedidoBebidasData(pedidoBebidas);
                 realizarPedido.passClienteData(getIntent().getExtras().<Cliente>getParcelable("cliente"));
                 fragmentManager.beginTransaction().replace(R.id.container, realizarPedido, mTitle.toString()).commit();
                 break;
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.wtf("onConfigurationChanged(Configuration newConfig)", "[newConfig -> " + newConfig + "]");
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+            if (resumenPedidoPizzas != null) {
+                resumenPedidoPizzas.setArrayPizzas(pedidoPizzas);
+            }
+
+            if (resumenPedidoBebidas != null) {
+                resumenPedidoBebidas.setArrayBebidas(pedidoBebidas);
+            }
+
+        }
+
+    }
+
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
-
-    public void disbleActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setTitle(mTitle);
     }
 
@@ -184,16 +221,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         return super.onOptionsItemSelected(item);
     }
 
-    private void muestraToast(String text) {
-        Context context = this.getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-    }
-
     @Override
-    public void passBebidaData(double totalBebidas) {
-        this.totalBebidas = totalBebidas;
+    public void passPizzaData(ArrayList<PedidoPizza> arrayList) {
+        Log.wtf("passPizzaData(ArrayList<PedidoPizza> arrayList)", "[" + arrayList + "]");
+        pedidoPizzas = arrayList;
     }
 
     @Override
@@ -202,21 +233,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     @Override
-    public void passPizzaData(ArrayList<PedidoPizza> arrayList) {
-        Log.wtf("passData(ArrayList<Pizza> arrayList)", "["+ arrayList +"]");
-        pedidoPizzas = arrayList;
-    }
-
-    @Override
-    public void passBebidaData(PedidoBebida pedidoBebida) {
-
-    }
-
-    @Override
     public void passBebidaData(ArrayList<PedidoBebida> arrayList) {
-        Log.wtf("passData(ArrayList<Bebida> arrayList)", "["+ arrayList +"]");
-        pedidoBebida = arrayList;
+        Log.wtf("passBebidaData(ArrayList<PedidoBebida> arrayList)", "[" + arrayList + "]");
+        pedidoBebidas = arrayList;
     }
 
+    @Override
+    public void passBebidaData(double totalBebidas) {
+        this.totalBebidas = totalBebidas;
+    }
 
 }

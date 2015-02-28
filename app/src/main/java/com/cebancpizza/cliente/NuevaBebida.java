@@ -107,7 +107,7 @@ public class NuevaBebida extends ActionBarActivity implements AdapterView.OnItem
     }
 
     private void muestraAviso(String title, String message) {
-        Builder dlgAlert  = new AlertDialog.Builder(this);
+        Builder dlgAlert = new AlertDialog.Builder(this);
         dlgAlert.setTitle(title);
         dlgAlert.setMessage(message);
         dlgAlert.setPositiveButton("OK", null);
@@ -152,7 +152,7 @@ public class NuevaBebida extends ActionBarActivity implements AdapterView.OnItem
         finish();
     }
 
-    public double getPrecioBebida(){
+    public double getPrecioBebida() {
 
         double precio = 0;
 
@@ -163,11 +163,6 @@ public class NuevaBebida extends ActionBarActivity implements AdapterView.OnItem
         Log.wtf("double getPrecioBebida()", "[" + precio + "]");
 
         return precio;
-    }
-    
-    public void resetLayout(){
-        sTipos.setSelection(0);
-        npCantidad.setValue(1);
     }
 
     private void muestraToast(String text) {

@@ -1,7 +1,6 @@
 package com.cebancpizza.cliente;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,60 +23,49 @@ import com.cebancpizza.database.PedidoBebida;
 
 import java.util.ArrayList;
 
-public class ResumenPedidoBebidas extends Fragment{
+public class ResumenPedidoBebidas extends Fragment {
 
     private ArrayList<String> bebidas;
-    private ArrayList<PedidoBebida> pedidoBebida;
+    private ArrayList<PedidoBebida> pedidoBebidas;
     private ListView lvListaPedidosBebidas;
     private OnResumenPedidoBebidasListener onResumenPedidoBebidasListener;
     private AdaptadorPedidoBebida adaptador;
     private CebancPizzaSQLiteHelper sqLiteHelper;
     private static final String SECTION_NUMBER = "section_number";
     private TextView tvTotal;
-    private String ARRAY_VALUE = "array_avalue";
     private int menuItemIndex;
     private int selectedItemIndex;
 
-    public ResumenPedidoBebidas() {
-    }
-
-    public ResumenPedidoBebidas newInstance(int sectionNumber) {
-        ResumenPedidoBebidas fragment = new ResumenPedidoBebidas();
-        Bundle args = new Bundle();
-        args.putInt(SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     /**
      * Al llamar a este metodo iniciara PedidoBebida
+     *
      * @param accion La operacion que se realizara: 1 Insertar una nueva bebida. 2 Editar la bebida.
      */
     public void iniciarPedidoBebida(int accion) {
         Intent intent = new Intent(getActivity(), NuevaBebida.class);
         intent.putExtra("accion", accion);
         if (accion == 2) {
-            intent.putExtra("bebida", pedidoBebida.get(selectedItemIndex));
+            intent.putExtra("bebida", pedidoBebidas.get(selectedItemIndex));
         }
         Log.wtf(getClass().getSimpleName(), "[accion -> " + accion + "]");
         startActivityForResult(intent, accion);
     }
 
     public void setArrayBebidas(ArrayList<PedidoBebida> arrayPedidoBebida) {
-        this.pedidoBebida = arrayPedidoBebida;
+        this.pedidoBebidas = arrayPedidoBebida;
     }
 
     public interface OnResumenPedidoBebidasListener {
-        public void passBebidaData(double totalBebidas);
-        public void passBebidaData(PedidoBebida pedidoBebida);
         public void passBebidaData(ArrayList<PedidoBebida> arrayList);
+
+        public void passBebidaData(double totalBebidas);
     }
 
     @Override
-    public void onAttach(Activity activity){
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            onResumenPedidoBebidasListener = (OnResumenPedidoBebidasListener)activity;
+            onResumenPedidoBebidasListener = (OnResumenPedidoBebidasListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement OnResumenPedidoBebidasListener.");
         }
@@ -86,6 +74,8 @@ public class ResumenPedidoBebidas extends Fragment{
     @Override
     public void onDetach() {
         super.onDetach();
+        onResumenPedidoBebidasListener.passBebidaData(pedidoBebidas);
+        onResumenPedidoBebidasListener.passBebidaData(getTotal());
         onResumenPedidoBebidasListener = null;
     }
 
@@ -100,23 +90,21 @@ public class ResumenPedidoBebidas extends Fragment{
 
         switch (resultCode) {
             case 1: // Añadir
-                pedidoBebida.add(data.getExtras().<PedidoBebida>getParcelable("bebida"));
-                onResumenPedidoBebidasListener.passBebidaData(pedidoBebida);
+                pedidoBebidas.add(data.getExtras().<PedidoBebida>getParcelable("bebida"));
                 break;
             case 2: // Modificar
-                pedidoBebida.set(selectedItemIndex, data.getExtras().<PedidoBebida>getParcelable("bebida"));
+                pedidoBebidas.set(selectedItemIndex, data.getExtras().<PedidoBebida>getParcelable("bebida"));
                 break;
         }
 
-        tvTotal.setText("Total: " + String.format("%.2f", getTotal())  + "€");
-        onResumenPedidoBebidasListener.passBebidaData(getTotal());
+        tvTotal.setText("Total: " + String.format("%.2f", getTotal()) + "€");
         adaptador.notifyDataSetChanged();
 
     }
 
-    public double getTotal(){
+    public double getTotal() {
         double total = 0;
-        for (PedidoBebida pedidoBebida : this.pedidoBebida) {
+        for (PedidoBebida pedidoBebida : pedidoBebidas) {
             total += pedidoBebida.getPrecio();
         }
         Log.wtf("double getTotal()", "[" + total + "]");
@@ -124,25 +112,15 @@ public class ResumenPedidoBebidas extends Fragment{
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null) {
-            pedidoBebida = savedInstanceState.getParcelableArrayList(ARRAY_VALUE);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(ARRAY_VALUE, pedidoBebida);
+        setRetainInstance(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.resumen_pedido_bebidas, container, false);
-        setRetainInstance(true);
-        return view;
+        return inflater.inflate(R.layout.resumen_pedido_bebidas, container, false);
     }
 
     @Override
@@ -155,7 +133,7 @@ public class ResumenPedidoBebidas extends Fragment{
         bebidas.add(""); //To make the first item of the spinner blank
         bebidas.addAll(sqLiteHelper.fillArrayList("bebidas", "descripcion"));
 
-        if (pedidoBebida != null) {
+        if (pedidoBebidas != null && adaptador == null) {
             initListView();
         }
     }
@@ -171,10 +149,10 @@ public class ResumenPedidoBebidas extends Fragment{
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
-        menu.setHeaderTitle(bebidas.get(pedidoBebida.get(info.position).getBebida()));
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        menu.setHeaderTitle(bebidas.get(pedidoBebidas.get(info.position).getBebida()));
         String[] menuItems = getResources().getStringArray(R.array.longclick_menu);
-        for (int i = 0; i<menuItems.length; i++) {
+        for (int i = 0; i < menuItems.length; i++) {
             menu.add(Menu.NONE, i, i, menuItems[i]);
         }
     }
@@ -195,26 +173,17 @@ public class ResumenPedidoBebidas extends Fragment{
         muestraAviso("Accion elegida:", menuItemName + "\n" + listItemName);
         */
 
-        if(menuItemIndex == 0) {
-            Log.wtf("bebidas.get(selectedItemIndex)", pedidoBebida.get(selectedItemIndex)+"");
+        if (menuItemIndex == 0) {
+            Log.wtf("bebidas.get(selectedItemIndex)", pedidoBebidas.get(selectedItemIndex) + "");
             iniciarPedidoBebida(2);
-        } else if(menuItemIndex == 1) {
-            adaptador.remove(pedidoBebida.get(selectedItemIndex));
+        } else if (menuItemIndex == 1) {
+            adaptador.remove(pedidoBebidas.get(selectedItemIndex));
             // bebidas.remove(selectedItemIndex);
             adaptador.notifyDataSetChanged();
-            tvTotal.setText("Total: " + String.format("%.2f", getTotal())  + "€");
+            tvTotal.setText("Total: " + String.format("%.2f", getTotal()) + "€");
         }
 
         return true;
-    }
-
-    private void muestraAviso(String title, String message) {
-        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(getActivity());
-        dlgAlert.setTitle(title);
-        dlgAlert.setMessage(message);
-        dlgAlert.setPositiveButton("OK", null);
-        dlgAlert.setCancelable(true);
-        dlgAlert.create().show();
     }
 
     class AdaptadorPedidoBebida extends ArrayAdapter<PedidoBebida> {
@@ -222,7 +191,7 @@ public class ResumenPedidoBebidas extends Fragment{
         Activity context;
 
         AdaptadorPedidoBebida(Activity context) {
-            super(context, R.layout.listitem_pedido_bebida, pedidoBebida);
+            super(context, R.layout.listitem_pedido_bebida, pedidoBebidas);
             this.context = context;
         }
 
@@ -231,15 +200,15 @@ public class ResumenPedidoBebidas extends Fragment{
             View item = inflater.inflate(R.layout.listitem_pedido_bebida, null);
 
             TextView tvPrecio = (TextView) item.findViewById(R.id.tvPrecio);
-            tvPrecio.setText(String.format("%.2f", pedidoBebida.get(position).getPrecio()) + "€");
+            tvPrecio.setText(String.format("%.2f", pedidoBebidas.get(position).getPrecio()) + "€");
 
             TextView tvTitulo = (TextView) item.findViewById(R.id.tvTitulo);
-            tvTitulo.setText(bebidas.get(pedidoBebida.get(position).getBebida()));
+            tvTitulo.setText(bebidas.get(pedidoBebidas.get(position).getBebida()));
 
             TextView tvSubtitulo = (TextView) item.findViewById(R.id.tvCod);
-            tvSubtitulo.setText("Cantidad: " + pedidoBebida.get(position).getCantidad());
+            tvSubtitulo.setText("Cantidad: " + pedidoBebidas.get(position).getCantidad());
 
-            return(item);
+            return (item);
         }
     }
 }

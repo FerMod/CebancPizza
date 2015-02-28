@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class NuevaPizza extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner sTipos, sMasas, sTamanos;
-    private Button bAnadir, bGuardarCambios, bDescartarCambios, bAceptar;
+    private Button bAnadir, bGuardarCambios, bDescartarCambios;
     private int posicionTipos, posicionMasas, posicionTamanos;
     private NumberPicker npCantidad;
     private int accion;
@@ -141,7 +141,7 @@ public class NuevaPizza extends ActionBarActivity implements AdapterView.OnItemS
     }
 
     private void muestraAviso(String title, String message) {
-        Builder dlgAlert  = new AlertDialog.Builder(this);
+        Builder dlgAlert = new AlertDialog.Builder(this);
         dlgAlert.setTitle(title);
         dlgAlert.setMessage(message);
         dlgAlert.setPositiveButton("OK", null);
@@ -172,7 +172,7 @@ public class NuevaPizza extends ActionBarActivity implements AdapterView.OnItemS
     }
 
     public void accionPizza(int accion) {
-        if (posicionTipos != 0 && posicionMasas !=0 && posicionTamanos !=0) {
+        if (posicionTipos != 0 && posicionMasas != 0 && posicionTamanos != 0) {
             pedidoPizza = new PedidoPizza(sqLiteHelper.getMaxId("pedidos", "pedido") + 1, posicionTipos, posicionMasas, posicionTamanos, npCantidad.getValue(), getPrecioPizza());
             muestraToast("Pizza añadida.");
 
@@ -191,7 +191,7 @@ public class NuevaPizza extends ActionBarActivity implements AdapterView.OnItemS
         finish();
     }
 
-    public double getPrecioPizza(){
+    public double getPrecioPizza() {
 
         double precio = 0;
 
@@ -211,16 +211,6 @@ public class NuevaPizza extends ActionBarActivity implements AdapterView.OnItemS
 
         Log.wtf("double getPrecioPizza()", "[" + precio + "]");
         return precio;
-    }
-
-    public void resetLayout(){
-        sTipos.setSelection(0);
-        sMasas.setSelection(0);
-        sTamanos.setSelection(0);
-        npCantidad.setValue(1);
-    }
-    private void onAceptarPressed(View view){
-        finish();
     }
 
 }

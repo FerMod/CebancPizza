@@ -23,9 +23,10 @@ public class PantallaInicio extends Activity {
 
     /**
      * Metodo para pasar al siguiente "Activity"
+     *
      * @param view view
      */
-    public void irSiguiente(View view){
+    public void irSiguiente(View view) {
         Intent intent = new Intent(this, DatosCliente.class);
         startActivity(intent);
     }

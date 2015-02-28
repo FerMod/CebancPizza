@@ -37,21 +37,10 @@ public class ResumenPedidoPizzas extends Fragment {
     private AdaptadorPedidoPizza adaptador;
     private OnResumenPedidoPizzasListener onResumenPedidoPizzasListener;
     private int selectedItemIndex, menuItemIndex;
-    private String ARRAY_VALUE = "array_value";
-
-    public ResumenPedidoPizzas() {
-    }
-
-    public static ResumenPedidoPizzas newInstance(int sectionNumber){
-        ResumenPedidoPizzas fragment = new ResumenPedidoPizzas();
-        Bundle args = new Bundle();
-        args.putInt(SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     /**
      * Al llamar a este metodo iniciara PedidoPizza
+     *
      * @param accion La operacion que se realizara: 1 Insertar una nueva pizza. 2 Editar la pizza.
      */
     public void iniciarPedidoPizza(int accion) {
@@ -69,16 +58,16 @@ public class ResumenPedidoPizzas extends Fragment {
     }
 
     public interface OnResumenPedidoPizzasListener {
-        public void passPizzaData(double totalPizzas);
-        //public void passPizzaData(PedidoPizza pedidoPizza);
         public void passPizzaData(ArrayList<PedidoPizza> arrayList);
+
+        public void passPizzaData(double totalPizzas);
     }
 
     @Override
-    public void onAttach(Activity activity){
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            onResumenPedidoPizzasListener = (OnResumenPedidoPizzasListener)activity;
+            onResumenPedidoPizzasListener = (OnResumenPedidoPizzasListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement OnResumenPedidoPizzasListener.");
         }
@@ -87,6 +76,8 @@ public class ResumenPedidoPizzas extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        onResumenPedidoPizzasListener.passPizzaData(pedidoPizzas);
+        onResumenPedidoPizzasListener.passPizzaData(getTotal());
         onResumenPedidoPizzasListener = null;
     }
 
@@ -102,20 +93,18 @@ public class ResumenPedidoPizzas extends Fragment {
         switch (resultCode) {
             case 1: // Añadir
                 pedidoPizzas.add(data.getExtras().<PedidoPizza>getParcelable("pizza"));
-                onResumenPedidoPizzasListener.passPizzaData(pedidoPizzas);
                 break;
             case 2: // Modificar
                 pedidoPizzas.set(selectedItemIndex, data.getExtras().<PedidoPizza>getParcelable("pizza"));
                 break;
         }
 
-        tvTotal.setText("Total: " + String.format("%.2f", getTotal())  + "€");
-        onResumenPedidoPizzasListener.passPizzaData(getTotal());
+        tvTotal.setText("Total: " + String.format("%.2f", getTotal()) + "€");
         adaptador.notifyDataSetChanged();
 
     }
 
-    public double getTotal(){
+    public double getTotal() {
         double total = 0;
         for (PedidoPizza pedidoPizza : pedidoPizzas) {
             total += pedidoPizza.getPrecio();
@@ -125,21 +114,15 @@ public class ResumenPedidoPizzas extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null) {
-            pedidoPizzas = savedInstanceState.getParcelableArrayList(ARRAY_VALUE);
-        }
+        setRetainInstance(true);
     }
-
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.resumen_pedido_pizzas, container, false);
-        setRetainInstance(true);
-        return view;
+        return inflater.inflate(R.layout.resumen_pedido_pizzas, container, false);
     }
 
     @Override
@@ -176,10 +159,10 @@ public class ResumenPedidoPizzas extends Fragment {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo)menuInfo;
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
         menu.setHeaderTitle(pizzas.get(pedidoPizzas.get(info.position).getPizza()));
         String[] menuItems = getResources().getStringArray(R.array.longclick_menu);
-        for (int i = 0; i<menuItems.length; i++) {
+        for (int i = 0; i < menuItems.length; i++) {
             menu.add(Menu.NONE, i, i, menuItems[i]);
         }
     }
@@ -200,14 +183,14 @@ public class ResumenPedidoPizzas extends Fragment {
         muestraAviso("Accion elegida:", menuItemName + "\n" + listItemName);
         */
 
-        if(menuItemIndex == 0) {
+        if (menuItemIndex == 0) {
             Log.wtf("pizzas.get(selectedItemIndex)", pedidoPizzas.get(selectedItemIndex) + "");
             iniciarPedidoPizza(2);
-        } else if(menuItemIndex == 1) {
+        } else if (menuItemIndex == 1) {
             adaptador.remove(pedidoPizzas.get(selectedItemIndex));
-           // pizzas.remove(selectedItemIndex);
+            // pizzas.remove(selectedItemIndex);
             adaptador.notifyDataSetChanged();
-            tvTotal.setText("Total: " + String.format("%.2f", getTotal())  + "€");
+            tvTotal.setText("Total: " + String.format("%.2f", getTotal()) + "€");
         }
 
         return true;
@@ -247,10 +230,10 @@ public class ResumenPedidoPizzas extends Fragment {
             TextView lblSubtitulo3 = (TextView) item.findViewById(R.id.tvTexto1);
             lblSubtitulo3.setText("Tamaño: " + tamanos.get(pedidoPizzas.get(position).getTamano()));
 
-            TextView lblSubtitulo4 = (TextView)item.findViewById(R.id.tvTexto2);
+            TextView lblSubtitulo4 = (TextView) item.findViewById(R.id.tvTexto2);
             lblSubtitulo4.setText("Cantidad: " + pedidoPizzas.get(position).getCantidad());
 
-            return(item);
+            return (item);
         }
     }
 

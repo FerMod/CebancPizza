@@ -57,8 +57,6 @@ public class DatosCliente extends ActionBarActivity {
         });
         etDireccion = (EditText) this.findViewById(R.id.etDireccion);
         etTelefono = (EditText) this.findViewById(R.id.etTelefono);
-
-        sqLiteHelper = new CebancPizzaSQLiteHelper(this, "CebancPizza", null, 1);
     }
 
     /*
@@ -131,7 +129,7 @@ public class DatosCliente extends ActionBarActivity {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
@@ -142,27 +140,27 @@ public class DatosCliente extends ActionBarActivity {
     public void onSiguientePressed(View view) {
 
         boolean correcto = true;
-        if(etNombre.getText().toString().equals("")) {
+        if (etNombre.getText().toString().equals("")) {
             correcto = false;
             muestraToast("No ha introducido ningun valor en el campo \"nombre\".");
         }
 
-        if(etDni.getText().toString().equals("")) {
+        if (etDni.getText().toString().equals("")) {
             correcto = false;
             muestraToast("No ha introducido ningun valor en el campo \"dni\".");
         }
 
-        if(etDireccion.getText().toString().equals("")) {
+        if (etDireccion.getText().toString().equals("")) {
             correcto = false;
             muestraToast("No ha introducido ningun valor en el campo \"direccion\".");
         }
 
-        if(etTelefono.getText().toString().equals("")) {
+        if (etTelefono.getText().toString().equals("")) {
             correcto = false;
             muestraToast("No ha introducido ningun valor en el campo \"telefono\".");
         }
 
-        if(correcto) {
+        if (correcto) {
             irSiguiente();
         }
 
@@ -170,6 +168,7 @@ public class DatosCliente extends ActionBarActivity {
 
     /**
      * Muestra un "Toast" con el texto que se le pasa como parametro
+     *
      * @param text texto a aparecer
      */
     private void muestraToast(String text) {
@@ -182,15 +181,16 @@ public class DatosCliente extends ActionBarActivity {
     /**
      * Metodo para pasar a la siguiente pantalla
      */
-    public void irSiguiente(){
+    public void irSiguiente() {
         Cliente cliente = new Cliente(etDni.getText().toString(), etNombre.getText().toString(), etDireccion.getText().toString(), etTelefono.getText().toString());
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("cliente", cliente);
         startActivity(intent);
     }
 
-    public void buscarCliente(View view){
-        String[] dni = new String[] {etDni.getText().toString()};
+    public void buscarCliente(View view) {
+        sqLiteHelper = new CebancPizzaSQLiteHelper(this, "CebancPizza", null, 1);
+        String[] dni = new String[]{etDni.getText().toString()};
         Cursor c = sqLiteHelper.select("clientes", null, "dni = ?", dni, null, null, null);
         if (c.moveToFirst()) {
             etDni.setText(c.getString(1));
@@ -201,6 +201,7 @@ public class DatosCliente extends ActionBarActivity {
         } else {
             muestraToast("Cliente nuevo introducido");
         }
+        sqLiteHelper.close();
     }
 
     public void adminLogin() {
@@ -231,7 +232,7 @@ public class DatosCliente extends ActionBarActivity {
     }
 
     private void muestraAviso(String title, String message) {
-        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
         dlgAlert.setTitle(title);
         dlgAlert.setMessage(message);
         dlgAlert.setPositiveButton("OK", null);

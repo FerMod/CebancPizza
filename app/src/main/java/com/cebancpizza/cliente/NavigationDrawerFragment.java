@@ -23,8 +23,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.cebancpizza.R;
-import com.cebancpizza.database.PedidoBebida;
-import com.cebancpizza.database.PedidoPizza;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -61,8 +59,6 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
-    private PedidoPizza pedidoPizza;
-    private PedidoBebida pedidoBebida;
 
     public NavigationDrawerFragment() {
     }
@@ -103,7 +99,7 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
 
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+        mDrawerListView.setAdapter(new ArrayAdapter<>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
@@ -254,15 +250,8 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_menu) {
-            CharSequence menuTitle = getActionBar().getTitle();
-            Log.wtf("boolean onOptionsItemSelected(" + item + ")", "[" + getString(R.string.menu_pizzas) + " -> " + (menuTitle == getString(R.string.menu_pizzas)) + "] " + "[" +  getString(R.string.menu_bebidas) + " -> " + (menuTitle == getString(R.string.menu_bebidas)) + "]");
-            if (menuTitle == getString(R.string.menu_pizzas)) {
-                mCallbacks.onActionBarButtonPressed(0);
-            } else if (menuTitle == getString(R.string.menu_bebidas)) {
-                mCallbacks.onActionBarButtonPressed(1);
-            } else if (menuTitle == getString(R.string.menu_finalizar)){
-                mCallbacks.onActionBarButtonPressed(2);
-            }
+            Log.wtf("boolean onOptionsItemSelected(MenuItem item)", "[ item -> " + item + "]");
+            mCallbacks.onActionBarButtonPressed(mCurrentSelectedPosition);
 
             return true;
         }
@@ -296,10 +285,11 @@ public class NavigationDrawerFragment extends Fragment {
 
         /**
          * Inicia una activity para insertar datos al pedido
+         *
          * @param num El numero del Activity:
-         *            <pre>     0 Inicia ResumenPedidoPizzas.
-         *            <pre>     1 Inicia ResumenPedidoBebidas
-         *            <pre>     1 Inicia RealizarPedido
+         *            <pre>     0 Inicia ResumenPedidoPizzas
+         *                                  <pre>     1 Inicia ResumenPedidoBebidas
+         *                                  <pre>     1 Inicia RealizarPedido
          */
         void onActionBarButtonPressed(int num);
 

@@ -43,9 +43,9 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     private Cliente cliente;
     private ArrayList<PedidoBebida> arrayPedidosBebidas;
     private ArrayList<PedidoPizza> arrayPedidosPizzas;
-    private CebancPizzaSQLiteHelper sqLiteHelper;
     private int posicionFormpagos;
     private ArrayList<String> formpagos;
+    private CebancPizzaSQLiteHelper sqLiteHelper;
 
 
     public RealizarPedido() {
@@ -82,7 +82,6 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.wtf("onActivityCreated()", "" + cliente);
-        sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 1);
         if (cliente != null) {
             initElements();
         }
@@ -130,6 +129,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     }
 
     private void insertarCliente() {
+        sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 1);
         if (!sqLiteHelper.exists("clientes", "cliente", cliente.getDni())) {
             ContentValues values = new ContentValues();
             values.put("dni", cliente.getDni());
@@ -138,9 +138,12 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
             values.put("telefono", cliente.getTelefono());
             sqLiteHelper.insert("clientes", null, values);
         }
+        sqLiteHelper.close();
     }
 
     public void showAlertFormpago() {
+
+        sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 1);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.alert_formpago_fields, null);
@@ -194,6 +197,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 
         alertDialog.show();
 
+        sqLiteHelper.close();
     }
 
     /**
@@ -230,6 +234,8 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 
     private void insertarPedidos() {
 
+        sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 1);
+
         int idPedido = sqLiteHelper.getMaxId("pedidos", "pedido") + 1;
 
         String[] descripcionFormpago = new String[]{formpagos.get(posicionFormpagos)};
@@ -239,6 +245,8 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
         if (cursor.moveToFirst()) {
             formpago = cursor.getString(0);
         }
+
+        //TODO FIX ALBARAN WHEN INSERTING CLIENTE (ALWAYS 0 ¿?¿?¿?)
 
         ContentValues values = new ContentValues();
         values.put("cliente", cliente.getCliente());
@@ -281,7 +289,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
             values.put("precio", pedidoBebida.getPrecio());
             sqLiteHelper.insert("pedidos_bebidas", null, values);
         }
-
+        sqLiteHelper.close();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -347,12 +355,12 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     }
 
     @Override
-    public void passPizzaData(ArrayList<PedidoPizza> arrayList) {
+    public void passPedidoPizzasData(ArrayList<PedidoPizza> arrayList) {
         this.arrayPedidosPizzas = arrayList;
     }
 
     @Override
-    public void passBebidaData(ArrayList<PedidoBebida> arrayList) {
+    public void passPedidoBebidasData(ArrayList<PedidoBebida> arrayList) {
         this.arrayPedidosBebidas = arrayList;
     }
 
