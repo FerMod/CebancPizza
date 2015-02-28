@@ -121,7 +121,6 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
                 insertarCliente();
                 insertarPedidos();
                 muestraAviso("Información", "Pedido realizado con exito!\nGracias por su compra!", true);
-
             }
 
         });
@@ -233,32 +232,24 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 
         int idPedido = sqLiteHelper.getMaxId("pedidos", "pedido") + 1;
 
-        String[] dni = new String[]{Integer.toString(cliente.getCliente())};
-        Cursor c = sqLiteHelper.select("albaranes", null, "cliente = ?", dni, null, null, null);
-
-        int albaran;
-        if (c.moveToFirst()) {
-            albaran = c.getInt(0);
-        } else {
-
-            String[] descripcionFormpago = new String[]{formpagos.get(posicionFormpagos)};
-            String[] columns = new String[] {"formpago"};
-            Cursor cursor = sqLiteHelper.select("formpagos", columns, "descripcion = ?", descripcionFormpago, null, null, null);
-            String formpago = "";
-            if (cursor.moveToFirst()) {
-                formpago = c.getString(0);
-            }
-
-            ContentValues values = new ContentValues();
-            values.put("cliente", cliente.getCliente());
-            values.put("fecha_albaran", sqLiteHelper.getCurrentDate());
-            values.put("formpago", formpago);
-            sqLiteHelper.insert("albaranes", null, values);
-            albaran = sqLiteHelper.getMaxId("albaranes", "albaran") + 1;
+        String[] descripcionFormpago = new String[]{formpagos.get(posicionFormpagos)};
+        String[] columns = new String[]{"formpago"};
+        Cursor cursor = sqLiteHelper.select("formpagos", columns, "descripcion = ?", descripcionFormpago, null, null, null);
+        String formpago = "";
+        if (cursor.moveToFirst()) {
+            formpago = cursor.getString(0);
         }
 
+        ContentValues values = new ContentValues();
+        values.put("cliente", cliente.getCliente());
+        values.put("fecha_albaran", sqLiteHelper.getCurrentDate());
+        values.put("formpago", formpago);
+        sqLiteHelper.insert("albaranes", null, values);
+
+        int albaran = sqLiteHelper.getMaxId("albaranes", "albaran") + 1;
+
         for (PedidoPizza pedidoPizza : arrayPedidosPizzas) {
-            ContentValues values = new ContentValues();
+            values = new ContentValues();
             values.put("pedido", idPedido);
             values.put("articulo", pedidoPizza.getPizza());
             values.put("tipo", 1);
@@ -276,7 +267,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
         }
 
         for (PedidoBebida pedidoBebida : arrayPedidosBebidas) {
-            ContentValues values = new ContentValues();
+            values = new ContentValues();
             values.put("pedido", idPedido);
             values.put("articulo", pedidoBebida.getBebida());
             values.put("tipo", 2);

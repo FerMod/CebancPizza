@@ -98,7 +98,7 @@ public class CebancPizzaSQLiteHelper extends SQLiteOpenHelper {
             "( " +
             "albaran INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "cliente INTEGER, " +
-            "fecha_albaran DATETIME DEFAULT CURRENT_DATE, " +
+            "fecha_albaran DATETIME DEFAULT CURRENT_TIMESTAMP, " +
             "formpago TEXT, " +
             "FOREIGN KEY(cliente) REFERENCES clientes(cliente), " +
             "FOREIGN KEY(formpago) REFERENCES formpagos(formpago) " +
@@ -184,8 +184,7 @@ public class CebancPizzaSQLiteHelper extends SQLiteOpenHelper {
 
     public Cursor select(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
-        return c;
+        return db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
     }
 
     public void update(String table, ContentValues values, String whereClause, String[] whereArgs) {
@@ -202,11 +201,7 @@ public class CebancPizzaSQLiteHelper extends SQLiteOpenHelper {
         String[] columns = new String[] {selection};
         String[] selectionArgs = new String[] {value};
         Cursor c = this.select(table, columns, selection + " = ?", selectionArgs, null, null, null);
-        if (c.moveToFirst()) {
-            return true;
-        } else {
-            return false;
-        }
+        return c.moveToFirst();
     }
 
     public double getPrecioVenta(String table, String primaryKey, String value){
@@ -222,7 +217,7 @@ public class CebancPizzaSQLiteHelper extends SQLiteOpenHelper {
     }
 
     public String getCurrentDate() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
         Date date = new Date();
         return simpleDateFormat.format(date);
     }
