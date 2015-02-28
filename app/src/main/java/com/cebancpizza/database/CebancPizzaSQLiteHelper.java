@@ -229,17 +229,17 @@ public class CebancPizzaSQLiteHelper extends SQLiteOpenHelper {
 
         ArrayList<String> arrayList = new ArrayList<>();
 
-        String debudMessage = "";
+        String debugMessage = "";
 
         if (c.moveToFirst()) {
             do {
-                debudMessage += " [" + c.getString(0) + "]";
+                debugMessage += " [" + c.getString(0) + "]";
 
                 arrayList.add(c.getString(0));
             } while(c.moveToNext());
         }
 
-        Log.wtf("fillArrayList(" + table + ", " + column + ")", debudMessage);
+        Log.wtf("fillArrayList(" + table + ", " + column + ")", debugMessage);
 
         return arrayList;
 
