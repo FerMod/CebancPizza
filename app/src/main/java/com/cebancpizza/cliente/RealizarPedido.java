@@ -130,6 +130,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     }
 
     private void insertarCliente() {
+        // Si no existe se introduce el nuevo cliente en la bbdd
         if (!sqLiteHelper.exists("clientes", "cliente", cliente.getDni())) {
             ContentValues values = new ContentValues();
             values.put("dni", cliente.getDni());
@@ -138,6 +139,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
             values.put("telefono", cliente.getTelefono());
             sqLiteHelper.insert("clientes", null, values);
         }
+        //TODO obtener id cliente con el dni introducido por el cliente
     }
 
     public void showAlertFormpago() {
