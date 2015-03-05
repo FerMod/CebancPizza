@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, ResumenPedidoPizzas.OnResumenPedidoPizzasListener, ResumenPedidoBebidas.OnResumenPedidoBebidasListener {
 
+//TODO redo the data save when orientation is changed. Te right way to do it is RETAINING AN OBJECT in runtime changes. (Handling Runtime Changes - http://developer.android.com/guide/topics/resources/runtime-changes.html) 
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
