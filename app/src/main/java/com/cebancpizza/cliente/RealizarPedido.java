@@ -141,7 +141,6 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
             values.put("telefono", cliente.getTelefono());
             sqLiteHelper.insert("clientes", null, values);
         }
-        //TODO obtener id cliente con el dni introducido por el cliente
         sqLiteHelper.close();
     }
 
