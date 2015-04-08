@@ -82,7 +82,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.wtf("onActivityCreated()", "" + cliente);
-        sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 1);
+        Log.wtf("REALIZAR PEDIDO( id cliente) ", "" + cliente.getCliente());
         if (cliente != null) {
             initElements();
         }
@@ -132,7 +132,8 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     private void insertarCliente() {
         // Si no existe se introduce el nuevo cliente en la bbdd
         sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 1);
-        if (!sqLiteHelper.exists("clientes", "cliente", cliente.getDni())) {
+        Log.wtf("REALIZAR PEDIDO (EXIST CLIENTE)",  "" +sqLiteHelper.exists("clientes", "dni", cliente.getDni()));
+        if (!sqLiteHelper.exists("clientes", "dni", cliente.getDni())) {
             ContentValues values = new ContentValues();
             values.put("dni", cliente.getDni());
             values.put("nombre", cliente.getNombre());
@@ -182,11 +183,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
                     @Override
                     public void onClick(View view) {
                         if (noErrors(posicionFormpagos)) {
-                            ContentValues values = new ContentValues();
-                            values.put("cliente", cliente.getCliente());
-                            values.put("fecha_albaran", sqLiteHelper.getCurrentDate());
-                            values.put("formpago", formpagos.get(posicionFormpagos));
-                            sqLiteHelper.insert("albaranes", null, values);
+                            Log.wtf("REALIZAR PEDIDO ( FORMPAGO )",  "" + formpagos.get(posicionFormpagos) );
                             mensajeRealizarPedido();
                             alertDialog.dismiss();
                         }

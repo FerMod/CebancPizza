@@ -182,7 +182,29 @@ public class DatosCliente extends ActionBarActivity {
      * Metodo para pasar a la siguiente pantalla
      */
     public void irSiguiente() {
-        Cliente cliente = new Cliente(etDni.getText().toString(), etNombre.getText().toString(), etDireccion.getText().toString(), etTelefono.getText().toString());
+
+       Cliente cliente;
+        Log.wtf("DATOS PEDIDO( exist cliente) ",  "" + sqLiteHelper.exists("clientes", "dni", etDni.getText().toString()));
+        if( sqLiteHelper.exists("clientes", "dni", etDni.getText().toString()) ) {
+
+            String[] dniCliente = new String[]{etDni.getText().toString()};
+            String[] columns = new String[]{"cliente"};
+            Cursor cursor = sqLiteHelper.select("clientes", columns, "dni = ?", dniCliente, null, null, null);
+            int idCliente = -1;
+            if (cursor.moveToFirst()) {
+                idCliente = cursor.getInt(0);
+            }
+
+            Log.wtf("DATOS PEDIDO( id cliente) ", idCliente + "");
+
+            cliente = new Cliente(idCliente, etDni.getText().toString(), etNombre.getText().toString(), etDireccion.getText().toString(), etTelefono.getText().toString());
+
+        } else {
+
+            cliente = new Cliente(etDni.getText().toString(), etNombre.getText().toString(), etDireccion.getText().toString(), etTelefono.getText().toString());
+
+        }
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("cliente", cliente);
         startActivity(intent);
