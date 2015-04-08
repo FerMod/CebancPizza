@@ -144,6 +144,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
         sqLiteHelper.close();
     }
 
+    //TODO MAKE DIFERENTS FORMPAGOS TO CHOOSE
     public void showAlertFormpago() {
 
         sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 1);
