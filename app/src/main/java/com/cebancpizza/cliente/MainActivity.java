@@ -1,6 +1,7 @@
 package com.cebancpizza.cliente;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -23,7 +24,6 @@ import com.cebancpizza.database.PedidoPizza;
 import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, ResumenPedidoPizzas.OnResumenPedidoPizzasListener, ResumenPedidoBebidas.OnResumenPedidoBebidasListener {
-
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -48,40 +48,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         public void passTotalData(double totalPizzas, double totalBebidas);
     }
 
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putParcelableArrayList(ARRAY_PIZZAS_STATE, pedidoPizzas);
-//        outState.putParcelableArrayList(ARRAY_PIZZAS_STATE, pedidoBebidas);
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        if (savedInstanceState != null) {
-//            pedidoPizzas = savedInstanceState.getParcelableArrayList(ARRAY_PIZZAS_STATE);
-//            pedidoBebidas = savedInstanceState.getParcelableArrayList(ARRAY_BEBIDAS_STATE);
-//
-//            Log.wtf("resumenPedidoPizzas", "[null -> " + (resumenPedidoPizzas == null) + "]");
-//            Log.wtf("resumenPedidoBebidas", "[null -> " + (resumenPedidoBebidas == null) + "]");
-//
-//            if (resumenPedidoPizzas != null) {
-//                resumenPedidoPizzas.setArrayPizzas(pedidoPizzas);
-//            }
-//
-//            if (resumenPedidoBebidas != null) {
-//                resumenPedidoBebidas.setArrayBebidas(pedidoBebidas);
-//            }
-//        }
-
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
         this.overridePendingTransition(R.anim.enter_anim_horizontal, R.anim.exit_anim_horizontal);
-
     }
 
     @Override

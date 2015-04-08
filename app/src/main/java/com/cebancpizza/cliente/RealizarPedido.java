@@ -82,6 +82,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.wtf("onActivityCreated()", "" + cliente);
+        sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 1);
         if (cliente != null) {
             initElements();
         }
@@ -129,6 +130,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     }
 
     private void insertarCliente() {
+        // Si no existe se introduce el nuevo cliente en la bbdd
         sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 1);
         if (!sqLiteHelper.exists("clientes", "cliente", cliente.getDni())) {
             ContentValues values = new ContentValues();
@@ -138,6 +140,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
             values.put("telefono", cliente.getTelefono());
             sqLiteHelper.insert("clientes", null, values);
         }
+        //TODO obtener id cliente con el dni introducido por el cliente
         sqLiteHelper.close();
     }
 
@@ -245,8 +248,6 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
         if (cursor.moveToFirst()) {
             formpago = cursor.getString(0);
         }
-
-        //TODO FIX ALBARAN WHEN INSERTING CLIENTE (ALWAYS 0 ¿?¿?¿?)
 
         ContentValues values = new ContentValues();
         values.put("cliente", cliente.getCliente());
