@@ -114,7 +114,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 
         Builder dlgAlert = new Builder(getActivity());
         dlgAlert.setTitle("Mensaje Confirmación");
-        dlgAlert.setMessage("Va ha realizar la compra del pedido de pizzas y bebidas.\nDesea continuar?");
+        dlgAlert.setMessage("Va a realizar la compra del pedido de pizzas y bebidas.\nDesea continuar?");
         dlgAlert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 muestraPremio(total);
@@ -132,9 +132,10 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     private void insertarCliente() {
         // Si no existe se introduce el nuevo cliente en la bbdd
         sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 1);
-        Log.wtf("REALIZAR PEDIDO (EXIST CLIENTE)",  "" +sqLiteHelper.exists("clientes", "dni", cliente.getDni()));
+        Log.wtf("REALIZAR PEDIDO (EXIST CLIENTE)",  "" + sqLiteHelper.exists("clientes", "dni", cliente.getDni()));
         if (!sqLiteHelper.exists("clientes", "dni", cliente.getDni())) {
             ContentValues values = new ContentValues();
+            values.put("cliente", sqLiteHelper.getMaxId("clientes", "cliente"));
             values.put("dni", cliente.getDni());
             values.put("nombre", cliente.getNombre());
             values.put("direccion", cliente.getDireccion());
@@ -209,7 +210,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 
         if (pos == 0) {
             correct = false;
-            muestraToast("No se ha seleccionado ningun valor en forma de pago.");
+            muestraToast("No se ha seleccionado ningún valor en forma de pago.");
         }
 
         return correct;

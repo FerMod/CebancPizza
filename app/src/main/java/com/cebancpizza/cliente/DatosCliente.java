@@ -183,7 +183,7 @@ public class DatosCliente extends ActionBarActivity {
      */
     public void irSiguiente() {
 
-       Cliente cliente;
+        Cliente cliente;
         Log.wtf("DATOS PEDIDO( exist cliente) ",  "" + sqLiteHelper.exists("clientes", "dni", etDni.getText().toString()));
         if( sqLiteHelper.exists("clientes", "dni", etDni.getText().toString()) ) {
 
