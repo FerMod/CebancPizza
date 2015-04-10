@@ -39,7 +39,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
 
     private TextView tvTotalPizzas, tvTotalBebidas, tvSumaTotales, tvNombre, tvDni, tvDireccion, tvTelefono;
     private String SECTION_NUMBER = "section_number";
-    private double totalPizzas, totalBebidas, total;
+    private double totalPizzas, totalBebidas;
     private Cliente cliente;
     private ArrayList<PedidoBebida> arrayPedidosBebidas;
     private ArrayList<PedidoPizza> arrayPedidosPizzas;
@@ -64,15 +64,14 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.realizar_pedido, container, false);
 
-        tvTotalPizzas = (TextView) view.findViewById(R.id.tvTotalPizzas);
+        tvTotalPizzas = (TextView)  view.findViewById(R.id.tvTotalPizzas);
         tvTotalPizzas.setText(" " + String.format("%.2f", totalPizzas) + "€");
 
-        tvTotalBebidas = (TextView) view.findViewById(R.id.tvTotalBebidas);
+        tvTotalBebidas = (TextView)  view.findViewById(R.id.tvTotalBebidas);
         tvTotalBebidas.setText(" " + String.format("%.2f", totalBebidas) + "€");
 
-        total = totalPizzas + totalBebidas;
-        tvSumaTotales = (TextView) view.findViewById(R.id.tvSumaTotales);
-        tvSumaTotales.setText(" " + String.format("%.2f", total) + "€");
+        tvSumaTotales = (TextView)  view.findViewById(R.id.tvSumaTotales);
+        tvSumaTotales.setText(" " + String.format("%.2f", totalPizzas + totalBebidas) + "€");
 
         setRetainInstance(true);
         return view;
@@ -89,6 +88,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
     }
 
     private void initElements() {
+
         tvNombre = (TextView) getActivity().findViewById(R.id.textViewNombre);
         tvNombre.setText(cliente.getNombre());
 
@@ -117,7 +117,7 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
         dlgAlert.setMessage("Va a realizar la compra del pedido de pizzas y bebidas.\nDesea continuar?");
         dlgAlert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                muestraPremio(total);
+                muestraPremio(totalPizzas + totalBebidas);
                 insertarCliente();
                 insertarPedidos();
                 muestraAviso("Información", "Pedido realizado con exito!\nGracias por su compra!", true);
@@ -134,8 +134,11 @@ public class RealizarPedido extends Fragment implements MainActivity.OnMainActiv
         sqLiteHelper = new CebancPizzaSQLiteHelper(getActivity(), "CebancPizza", null, 1);
         Log.wtf("REALIZAR PEDIDO (EXIST CLIENTE)",  "" + sqLiteHelper.exists("clientes", "dni", cliente.getDni()));
         if (!sqLiteHelper.exists("clientes", "dni", cliente.getDni())) {
+
+            cliente.setCliente( sqLiteHelper.getMaxId("clientes", "cliente") + 1);
+
             ContentValues values = new ContentValues();
-            values.put("cliente", sqLiteHelper.getMaxId("clientes", "cliente"));
+            values.put("cliente", cliente.getCliente());
             values.put("dni", cliente.getDni());
             values.put("nombre", cliente.getNombre());
             values.put("direccion", cliente.getDireccion());

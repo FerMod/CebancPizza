@@ -198,25 +198,28 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         return super.onOptionsItemSelected(item);
     }
 
+    //TODO FIX NOT UPDATING THE PRICE CORRECTLY
     @Override
     public void passPizzaData(ArrayList<PedidoPizza> arrayList) {
-        Log.wtf("passPizzaData(ArrayList<PedidoPizza> arrayList)", "[" + arrayList + "]");
+        Log.wtf("[MAIN ACTIVITY] passPizzaData(ArrayList<PedidoPizza> arrayList)", "[" + arrayList + "]");
         pedidoPizzas = arrayList;
     }
 
     @Override
     public void passPizzaData(double totalPizzas) {
+        Log.wtf("[MAIN ACTIVITY] passPizzaData(double totalPizzas)", "[" + totalPizzas + "]");
         this.totalPizzas = totalPizzas;
     }
 
     @Override
     public void passBebidaData(ArrayList<PedidoBebida> arrayList) {
-        Log.wtf("passBebidaData(ArrayList<PedidoBebida> arrayList)", "[" + arrayList + "]");
+        Log.wtf("[MAIN ACTIVITY] passBebidaData(ArrayList<PedidoBebida> arrayList)", "[" + arrayList + "]");
         pedidoBebidas = arrayList;
     }
 
     @Override
     public void passBebidaData(double totalBebidas) {
+        Log.wtf("[MAIN ACTIVITY] passBebidaData(double totalBebidas)", "[" + totalBebidas + "]");
         this.totalBebidas = totalBebidas;
     }
 
